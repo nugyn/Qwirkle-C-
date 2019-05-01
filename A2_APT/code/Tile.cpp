@@ -1,4 +1,14 @@
 
 #include "Tile.h"
+#include "TileCodes.h"
 
-// Empty... for now?
+Tile::Tile(Colour colour, Shape shape){
+this -> colour = colour;
+this -> shape = shape;
+}
+
+Tile::~Tile(){
+
+}
+
+

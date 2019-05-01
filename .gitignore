@@ -1,3 +1,5 @@
 
 *.pdf
 *.zip
+*.ipch
+*.bin

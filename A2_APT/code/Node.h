@@ -12,6 +12,16 @@ public:
 
    Tile*    tile;
    Node*    next;
+   Node*    prev;
+   bool  isHeader;
+
+   bool setHeader();
+   Node* getPrev();
+   Node* getNext();
+   void setNext(Node* next);
+   void setPrev(Node* prev);
+   bool isHeader();
+            
 };
 
 #endif // ASSIGN2_NODE_H
