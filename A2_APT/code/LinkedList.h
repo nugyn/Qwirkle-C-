@@ -9,10 +9,17 @@ public:
 
    LinkedList();
    ~LinkedList();
-   
-   void createTile(Colour colour, Shape shape);
+
+   int size();
+   void clear();
+   void createTile(Tile* tile);
+
    void insertFront(Tile* tile);
-   void insertPosition(int pos, Colour colour, Shape shape);
+   void insertPosition(int pos, Tile* tile);
+   void insertBack(Tile* tile);
+
+   void deleteFront();
+   void deleteBack();
    void deletePosition(int pos);
 
 private:
