@@ -1,6 +1,7 @@
 
 #include "LinkedList.h"
 
+
 LinkedList::LinkedList()
 {
 	head = nullptr;
@@ -10,10 +11,14 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
+	clear();
 }
 
 void LinkedList::clear(){
-	while (this -> )
+	while (this -> head != nullptr){
+		Node* toDelete = this -> head;
+		head = toDelete -> next;
+	}
 }
 
 int LinkedList::size(){
@@ -43,7 +48,8 @@ void LinkedList::insertFront(Tile *tile)
 	Node *insertNode = new Node(tile, this -> head, nullptr);
 	this -> head -> prev = insertNode;
 	this -> head = insertNode;
-	} else {
+	} 
+	else{
 	Node *insertNode = new Node(tile, this -> head, nullptr);
 	this -> head -> prev = insertNode;
 	this -> head = insertNode;
