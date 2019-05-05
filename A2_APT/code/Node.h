@@ -22,7 +22,7 @@ public:
    Node* getNext();
    void setNext(Node* next);
    void setPrev(Node* prev);
-   bool isHeader();
+   //bool isHeader();
             
 };
 
