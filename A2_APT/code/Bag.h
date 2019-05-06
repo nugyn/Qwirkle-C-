@@ -1,6 +1,10 @@
+#include "Tile.h"
+#include "Node.h"
 
 class Bag
 {
 private:
-//Array of 108 Nodes	
-}
+	Tile bagArray [108];
+public:
+	void fillBag();
+};
