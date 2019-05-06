@@ -4,7 +4,7 @@
 class Bag
 {
 private:
-	Tile bagArray [108];
+	Tile bagArray [72];
 public:
 	void fillBag();
 };
