@@ -6,5 +6,9 @@ Player::Player(std::string name){
 }
 
 Player::~Player(){
+
+}
+
+Player::setHand(){
   
 }

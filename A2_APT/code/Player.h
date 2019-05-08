@@ -10,8 +10,11 @@ public:
     Player(string name);
     ~Player();
 
+    // Sets initial hand when game starts
     void setHand();
 
-    void placeTile();
+    // Removes tile from hand
+    void placeTile(Tile tile);
+    // Adds tile to hand
     void drawTile();
 }
