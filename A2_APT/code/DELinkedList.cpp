@@ -1,7 +1,6 @@
 
 #include "LinkedList.h"
 
-
 LinkedList::LinkedList()
 {
 	head = nullptr;
@@ -14,84 +13,126 @@ LinkedList::~LinkedList()
 	clear();
 }
 
-void LinkedList::clear(){
-	while (this -> head != nullptr){
-		Node* toDelete = this -> head;
-		head = toDelete -> next;
-	}
-}
-
-int LinkedList::size(){
-	
-}
-
-void LinkedList::createTile(Tile* tile)
+void LinkedList::clear()
 {
-	Node *temp = new Node(tile, nullptr);
-
-	if (head == nullptr)
+	while (this->head != nullptr)
 	{
-		head = temp;
-		tail = temp;
-		temp = nullptr;
+		Node *toDelete = this->head;
+		head = toDelete->getNext();
+		delete head;
+	}
+	tail = nullptr;
+	delete tail;
+}
+
+int LinkedList::size()
+{
+	int size = 0;
+	Node *countNode = this->head;
+	while (countNode != nullptr)
+	{
+		size++;
+		countNode = countNode->getNext();
+	}
+	return size;
+}
+
+void LinkedList::insertTile(Tile *tile)
+{
+	Node *newNode = new Node(tile, nullptr, nullptr);
+	Node *currNode = this->head;
+
+	if (currNode == nullptr)
+	{
+		head = newNode;
+		tail = newNode;
+		newNode->setNext(nullptr);
+		newNode->setPrev(nullptr);
 	}
 	else
 	{
-		tail->next = temp;
-		tail = temp;
+		while (currNode->getNext() != nullptr)
+		{
+			if (currNode->getNext() == nullptr)
+			{
+				currNode->setNext(newNode);
+				tail = newNode;
+				tail->setNext(nullptr);
+				tail->setPrev(currNode);
+			}
+		}
 	}
 }
 
 void LinkedList::insertFront(Tile *tile)
+{
 
-	if(this -> head == nullptr){
-	Node *insertNode = new Node(tile, this -> head, nullptr);
-	this -> head -> prev = insertNode;
-	this -> head = insertNode;
-	} 
-	else{
-	Node *insertNode = new Node(tile, this -> head, nullptr);
-	this -> head -> prev = insertNode;
-	this -> head = insertNode;
+	if (this->head == nullptr)
+	{
+		Node *insertNode = new Node(tile, nullptr, nullptr);
+		this->head = insertNode;
 	}
-
-	
-	
-	// else (this -> tail == nullptr){
-	// 	this -> tail = insertNode;
-	// }
+	else
+	{
+		Node *insertNode = new Node(tile, this->head, nullptr);
+		Node *currNode = head;
+		currNode->setNext(currNode);   // change the reference to the next node of head to the currentHead
+		currNode->setPrev(insertNode); // change the previous of Head to the newNode
+		this->head = insertNode;	   //the new head is now insertNode.
+	}
 }
 
-void LinkedList::insertPosition(int pos, Tile* tile)
+void LinkedList::insertPosition(int pos, Tile *tile)
 {
-	Node *pre = new Node();
-	Node *cur = new Node();
-	Node *temp = new Node();
-	cur = head;
+	Node *currNode = head; //pos
+	Node *preNode = nullptr;
+	Node *insertNode = new Node(tile, nullptr, nullptr);
 	for (int i = 1; i < pos; i++)
 	{
-		pre = cur;
-		cur = cur->next;
+		preNode = currNode;
+		currNode = currNode->getNext();
 	}
-	temp -> tile;
-	pre -> next = temp;
-	temp -> next = cur;
+	preNode->setNext(insertNode);  // previous to end, then setNext, to the one being inserted
+	insertNode->setNext(currNode); // the the inserted node, setNext to the currNode of pos.
+	insertNode->setPrev(preNode);  // the previous of insert needs to be preNode
 }
 
-void LinkedList::insertBack(int pos, Tile* tile){
-
+void LinkedList::insertBack(Tile *tile)
+{
+	Node *insertNode = new Node(tile, nullptr, nullptr); // node to be inserted
+	Node *backNode = this -> tail; // the end node, which is the tail
+	backNode -> setNext(insertNode); //reassign the next node to be the inserted node
+	insertNode -> setPrev(backNode); // set previous of the inserted to the previous end node
+	insertNode -> setNext(nullptr); // set the next of inserted node to nyll
+	this -> tail = insertNode;  //re assign to tail 
+	
 }
 
+void LinkedList::deleteBack()
+{
+	Node *toDelete = this->tail;
+	Node *newTail = this->tail;
 
-void LinkedList::deleteFront(){
-	Node* toDelete = head;
-	head = head -> next;
-	head -> prev = nullptr;
-	if(head == nullptr){
+	newTail = newTail->getPrev();
+
+	delete toDelete;
+
+	this->tail = newTail;
+}
+
+void LinkedList::deleteFront()
+{
+	Node *toDelete = head;
+
+	if (head == nullptr)
+	{
 		// 1 in the list
-		this -> tail = nullptr;
-	} else {
-		//...
+		this->tail = nullptr;
+	}
+	else
+	{
+		head = head->next;
+		head->prev = nullptr;
 	}
 
 	delete toDelete;
@@ -99,29 +140,19 @@ void LinkedList::deleteFront(){
 
 void LinkedList::deletePosition(int pos)
 {
-	// Node *current = new Node();
-	// Node *previous = new Node();
-	// current = head;
-	// for (int i = 1; i < pos; i++)
-	// {
-	// 	previous = current;
-	// 	current = current->next;
-	// }
-	// previous->next = current->next;
-
-	if(pos == 0){
-		deleteFront();
-
-	} else{
-		// assume pos > 0
-		Node* node = this -> head;
-	//	Node* prev = nullptr;
-		for(int count = 0; count < pos; ++count){
-	//		prev = node;
-			node = node -> next;
+	Node *currNode = nullptr;
+	Node *prevNode = nullptr;
+	currNode = this->head;
+	for (int i = 1; i < pos; i++)
+	{
+		if (pos == 1)
+		{
+			deleteFront();
+			return;
 		}
-	//	prev -> next = node -> next;
-		delete node;
+		prevNode = currNode;
+		currNode = currNode -> getNext();
 	}
+	prevNode -> setNext(currNode -> getNext());
+	delete currNode;
 }
-

@@ -1,17 +1,12 @@
 
 #include "Node.h"
 
-Node::Node(Tile *tile, Node *next)
-{
-    this->tile = tile;
-    this->next = next;
-}
 
-Node::Node(Tile *tile, Node *next, Node *prev)
+
+Node::Node(Tile *tile)
 {
     this->tile = tile;
     this->next = next;
-    this->prev = prev;
 }
 
 //TO DO: Deconstructor

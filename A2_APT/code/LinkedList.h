@@ -13,7 +13,7 @@ public:
 
    int size();
    void clear();
-   void createTile(Tile* tile);
+   void insertTile(Tile* tile);
 
    void insertFront(Tile* tile);
    void insertPosition(int pos, Tile* tile);

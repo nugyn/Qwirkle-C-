@@ -15,11 +15,6 @@ public:
  //  Node(Tile* tile,  std::shared_ptr<Node> prev);
    Node(Node& other);
 
-   Tile*    tile;
-   Node*    next;
-   Node*    prev;
-   bool  isHeader;
-
    bool setHeader();
    Node* getPrev();
    Node* getNext();
@@ -27,10 +22,16 @@ public:
    void setPrev(Node* prev);
    bool isHeader();
 
-  /// std::shared_ptr<Node> next;
+  // std::shared_ptr<Node> next;
   // std::shared_ptr<Node> prev;
 
             
+private:
+
+   Tile*    tile;
+   Node*    next;
+   Node*    prev;
+   bool  isHeader;
 };
 
 #endif // ASSIGN2_NODE_H
