@@ -10,6 +10,7 @@ public:
 
    LinkedList();
    ~LinkedList();
+   LinkedList(LinkedList &other);
 
    int size();
    void clear();
@@ -22,7 +23,7 @@ public:
    void deleteFront();
    void deleteBack();
    void deletePosition(int pos);
-
+   
 private:
    Node* head;
    Node* tail;

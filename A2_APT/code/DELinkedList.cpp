@@ -5,12 +5,20 @@ LinkedList::LinkedList()
 {
 	head = nullptr;
 	tail = nullptr;
-	// TODO
 }
 
 LinkedList::~LinkedList()
 {
 	clear();
+}
+
+LinkedList::LinkedList(LinkedList &other){
+	Node * copyNode = other.head;
+	while(copyNode != nullptr)
+	{
+		insertTile(copyNode -> getTile());
+		copyNode = copyNode -> getNext();
+	}
 }
 
 void LinkedList::clear()
@@ -131,8 +139,8 @@ void LinkedList::deleteFront()
 	}
 	else
 	{
-		head = head->next;
-		head->prev = nullptr;
+		head = head -> getNext();
+		head -> setPrev(nullptr);
 	}
 
 	delete toDelete;

@@ -11,6 +11,7 @@ public:
   Node(Tile* tile, Node* next);
   Node(Tile* tile, Node* next, Node* prev);
   ~Node();
+  Node(Node &other);
  //  Node(Tile* tile, std::shared_ptr<Node> next);
  //  Node(Tile* tile,  std::shared_ptr<Node> prev);
   // Node(Node& other);
@@ -20,6 +21,7 @@ public:
    Node* getNext();
    void setNext(Node* next);
    void setPrev(Node* prev);
+   Tile* getTile();
   
 
   // std::shared_ptr<Node> next;
@@ -27,7 +29,6 @@ public:
 
             
 private:
-
    Tile*    tile;
    Node*    next;
    Node*    prev;
