@@ -10,17 +10,17 @@ public:
 
   Node(Tile* tile, Node* next);
   Node(Tile* tile, Node* next, Node* prev);
-
+  ~Node();
  //  Node(Tile* tile, std::shared_ptr<Node> next);
  //  Node(Tile* tile,  std::shared_ptr<Node> prev);
-   Node(Node& other);
+  // Node(Node& other);
 
    bool setHeader();
    Node* getPrev();
    Node* getNext();
    void setNext(Node* next);
    void setPrev(Node* prev);
-   bool isHeader();
+  
 
   // std::shared_ptr<Node> next;
   // std::shared_ptr<Node> prev;

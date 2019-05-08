@@ -3,16 +3,24 @@
 
 
 
-Node::Node(Tile *tile)
+Node::Node(Tile *tile, Node* next)
 {
     this->tile = tile;
     this->next = next;
 }
 
-//TO DO: Deconstructor
-Node::Node(Node &other)
+Node::Node(Tile *tile, Node* next, Node* prev)
 {
-    // TO DO
+    this->tile = tile;
+    this->next = next;
+    this->prev = prev;
+}
+
+//TO DO: Deconstructor
+Node::~Node()
+{
+    delete tile;
+    delete next;
 }
 
 bool Node::setHeader()
@@ -41,7 +49,3 @@ void Node::setPrev(Node *prev)
     prev = prev;
 }
 
-bool Node::isHeader()
-{
-    return isHeader;
-}

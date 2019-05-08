@@ -7,7 +7,9 @@
 
 int main(void) {
    LinkedList* list = new LinkedList();
-   delete list;
+   Tile* newTile = new Tile('R', '1');
+   list.createTile(newTile)
+
 
    std::cout << "TODO: Implement Qwirkle!" << std::endl;
 
