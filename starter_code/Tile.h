@@ -1,5 +1,4 @@
 
-#include "TileCodes.h"
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
 
@@ -11,16 +10,8 @@ typedef int Shape;
 
 class Tile {
 public:
-
-   Tile(Colour colour, Shape shape);
-  ~Tile();
-
-private: 
-
    Colour colour;
    Shape  shape;
 };
-
-
 
 #endif // ASSIGN2_TILE_H
