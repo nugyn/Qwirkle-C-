@@ -21,6 +21,7 @@ public:
    Node* getNext();
    void setNext(Node* next);
    void setPrev(Node* prev);
+
    Tile* getTile();
   
 
