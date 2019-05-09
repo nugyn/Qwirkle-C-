@@ -7,14 +7,14 @@ public:
     int score;
     LinkedList hand;
 
-    Player(string name);
+    Player(string name, LinkedList hand);
     ~Player();
 
-    // Sets initial hand when game starts
-    void setHand();
+    // Testing method, sets hand to given LinkedList
+    void setHand(LinkedList hand);
 
     // Removes tile from hand
     void placeTile(Tile tile);
     // Adds tile to hand
-    void drawTile();
+    void drawTile(Tile tile);
 }
