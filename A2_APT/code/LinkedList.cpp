@@ -1,5 +1,9 @@
 
 #include "LinkedList.h"
+#include "Node.h"
+
+#include <iostream>
+
 
 LinkedList::LinkedList()
 {
@@ -31,9 +35,8 @@ void LinkedList::createTile(Tile* tile)
 
 void LinkedList::insertFront(Tile *tile)
 {
-	Node *insertNode = new Node(tile, nullptr);
-	insertNode->next = head;
-	head = insertNode;
+	Node *insertNode = new Node(tile, this -> head);
+	this -> head = insertNode;
 }
 
 void LinkedList::insertPosition(int pos, Tile* tile)

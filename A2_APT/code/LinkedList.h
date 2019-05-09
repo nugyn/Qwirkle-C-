@@ -18,15 +18,19 @@ public:
 
    void insertFront(Tile* tile);
    void insertPosition(int pos, Tile* tile);
-   void insertBack(Tile* tile);
+   void insertBack(Node* node, Tile* tile);
 
    void deleteFront();
    void deleteBack();
    void deletePosition(int pos);
-   
+
+   std::string printList();
+
 private:
    Node* head;
    Node* tail;
+   int size(Node* node);
+   Node* insertBack(Tile *tile);
 
    //std::shared_ptr<Node> head;
    //std::shared_ptr<Node> tail;

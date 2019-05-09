@@ -1,5 +1,10 @@
 
 #include "LinkedList.h"
+#include <iostream>
+
+using std::string;
+using std::cout;
+using std::endl;
 
 LinkedList::LinkedList()
 {
@@ -33,8 +38,33 @@ void LinkedList::clear()
 	delete tail;
 }
 
+int size(Node* node){
+	int retVal = 0;
+		if(node == nullptr){
+			retVal = 0;
+		}
+		else {
+			retVal = 1 + size(node -> next)
+		}
+		return retVal;
+}
+
 int LinkedList::size()
-{
+{	
+	return size(head);
+	//Size(n) = 1 + Size(small h)
+    //Size(empty) = 0
+	// int retVal = 0;
+	// if( head = nullptr){
+	// 	retVal = 0;
+	// }
+	// else {
+	// 	retVal = 1 + size(head -> next)
+	// }
+	// return retVal;
+
+
+		/*
 	int size = 0;
 	Node *countNode = this->head;
 	while (countNode != nullptr)
@@ -43,6 +73,7 @@ int LinkedList::size()
 		countNode = countNode->getNext();
 	}
 	return size;
+	*/
 }
 
 void LinkedList::insertTile(Tile *tile)
@@ -105,15 +136,28 @@ void LinkedList::insertPosition(int pos, Tile *tile)
 	insertNode->setPrev(preNode);  // the previous of insert needs to be preNode
 }
 
-void LinkedList::insertBack(Tile *tile)
+Node* LinkedList::insertBack(Tile *tile)
 {
-	Node *insertNode = new Node(tile, nullptr, nullptr); // node to be inserted
-	Node *backNode = this -> tail; // the end node, which is the tail
-	backNode -> setNext(insertNode); //reassign the next node to be the inserted node
-	insertNode -> setPrev(backNode); // set previous of the inserted to the previous end node
-	insertNode -> setNext(nullptr); // set the next of inserted node to nyll
-	this -> tail = insertNode;  //re assign to tail 
-	
+	Node* newHead = nullptr;
+		if(newHead == nullptr){
+			newHead = new Node(tile, nullptr);
+		}
+		else{
+			newHead -> next = insertBack(node -> next, data);
+			newHead = node;
+		}
+
+	return newHead;
+	// Node *insertNode = new Node(tile, nullptr, nullptr); // node to be inserted
+	// Node *backNode = this -> tail; // the end node, which is the tail
+	// backNode -> setNext(insertNode); //reassign the next node to be the inserted node
+	// insertNode -> setPrev(backNode); // set previous of the inserted to the previous end node
+	// insertNode -> setNext(nullptr); // set the next of inserted node to nyll
+	// this -> tail = insertNode;  //re assign to tail 
+}
+
+void LinkedList::insertBack(Node* node, Tile* tile){
+		insertBack(node, tile);
 }
 
 void LinkedList::deleteBack()
@@ -163,4 +207,15 @@ void LinkedList::deletePosition(int pos)
 	}
 	prevNode -> setNext(currNode -> getNext());
 	delete currNode;
+}
+
+string LinkedList::printList(){
+
+	Node* currNode = this -> head;
+	while (currNode != nullptr)
+	{
+		currNode = currNode -> getNext();
+	}
+
+
 }
