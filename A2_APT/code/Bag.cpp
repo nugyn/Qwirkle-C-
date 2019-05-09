@@ -1,13 +1,20 @@
 #include <iostream>
-#include <random>
+#include <stdlib.h> 
+#include <time.h>
 #include "Bag.h"
 #include "TileCodes.h"
 #include "LinkedList.h"
 
 void Bag::fillBag()
 {
-	Tile* tempTile = new Tile(NULL, NULL);
-
+	LinkedList linkedList;
+	LinkedList randLinkedList;
+    Tile* tempTile = new Tile(NULL, NULL);
+	int randMax = 0;
+	int randSelect = 0;
+	srand(time(NULL));
+	
+	
 	for (int i = 0; i != 72; i++)
 	{
 		tempTile->shape = (i % 6) + 1;
@@ -25,15 +32,22 @@ void Bag::fillBag()
 		if (i >= 60 && i < 72)
 			tempTile->colour = PURPLE;
 
-		bagArray[i] = *tempTile;
+		linkedList.insertTile(tempTile);
 	}
-	std::random_shuffle(&bagArray[0], &bagArray[72]);
-	LinkedList linkedList;
 	
-	for (int i = 0; i < 72; i++)
+	randMax = linkedList.size();
+	
+	while (randMax != 0)
 	{
-		linkedList.createTile(&bagArray[i]);
+		randSelect = rand() % randMax + 1;
+		randLinkedList.insertTile(linkedList.getTile(randSelect));
+		linkedList.deletePosition(randSelect);
+		randMax--;
 	}
 
 
+}
+
+void Bag::shuffleBag()
+{
 }
