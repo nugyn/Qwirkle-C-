@@ -1,11 +1,12 @@
-#include "Tile.h"
-#include "Node.h"
+#pragma once
+#include "LinkedList.h"
 
 class Bag
 {
-private:
-
 public:
 	void fillBag();
 	void shuffleBag();
+private:
+	LinkedList linkedList1;
+	LinkedList linkedList2;
 };

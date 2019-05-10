@@ -1,19 +1,11 @@
-#include <iostream>
-#include <stdlib.h> 
-#include <time.h>
 #include "Bag.h"
-#include "TileCodes.h"
-#include "LinkedList.h"
+#include <stdlib.h> 
+#include <time.h> 
+
 
 void Bag::fillBag()
 {
-	LinkedList linkedList;
-	LinkedList randLinkedList;
-    Tile* tempTile = new Tile(NULL, NULL);
-	int randMax = 0;
-	int randSelect = 0;
-	srand(time(NULL));
-	
+	Tile* tempTile = new Tile(NULL, NULL);
 	
 	for (int i = 0; i != 72; i++)
 	{
@@ -34,20 +26,22 @@ void Bag::fillBag()
 
 		linkedList.insertTile(tempTile);
 	}
-	
-	randMax = linkedList.size();
-	
-	while (randMax != 0)
-	{
-		randSelect = rand() % randMax + 1;
-		randLinkedList.insertTile(linkedList.getTile(randSelect));
-		linkedList.deletePosition(randSelect);
-		randMax--;
-	}
-
-
+	shuffleBag();
 }
 
 void Bag::shuffleBag()
 {
+	srand(time(NULL));
+	int randMax = 0;
+	int randSelect = 0;
+
+	randMax = linkedList1.size();
+
+	while (randMax != 0)
+	{
+		randSelect = rand() % randMax + 1;
+		linkedList2.insertTile(linkedList1.getTile(randSelect));
+		linkedList1.deletePosition(randSelect);
+		randMax--;
+	}
 }
