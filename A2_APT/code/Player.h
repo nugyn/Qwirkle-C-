@@ -7,14 +7,17 @@ public:
     int score;
     LinkedList hand;
 
-    Player(string name, LinkedList hand);
+    Player(std::string name);
+    Player(std::string name, LinkedList hand);
     ~Player();
 
     // Testing method, sets hand to given LinkedList
     void setHand(LinkedList hand);
 
     // Removes tile from hand
-    void placeTile(Tile tile);
+    boolean getTile(Tile tile);
     // Adds tile to hand
-    void drawTile(Tile tile);
+    boolean addTile(Tile tile);
+  private:
+    Node currNode;
 }
