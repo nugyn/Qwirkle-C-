@@ -6,7 +6,8 @@ class Bag
 public:
 	void fillBag();
 	void shuffleBag();
+	LinkedList bagLinkedList;
 private:
-	LinkedList linkedList1;
-	LinkedList linkedList2;
+	LinkedList firstLinkedList;
+	LinkedList secondLinkedList;
 };

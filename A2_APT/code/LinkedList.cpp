@@ -1,89 +1,160 @@
-
 #include "LinkedList.h"
-#include "Node.h"
-
 #include <iostream>
+
+//!!!!!!!!!!!!!!!!!!!!!!!
+//This is a DELinked list
+//!!!!!!!!!!!!!!!!!!!!!!!
 
 
 LinkedList::LinkedList()
 {
 	head = nullptr;
 	tail = nullptr;
-	// TODO
 }
 
 LinkedList::~LinkedList()
 {
+	//clear();	//Clear is still not working as expected 
 }
 
-void LinkedList::createTile(Tile* tile)
+void LinkedList::insertFront(Tile* tile)	//Works
 {
-	Node *temp = new Node(tile, nullptr);
-
+	Node* newNode = new Node(tile, nullptr);
+	newNode->getTile()->setColour(tile->getColour());
+	newNode->getTile()->setShape(tile->getShape());
+	newNode->setNext(nullptr);
 	if (head == nullptr)
 	{
-		head = temp;
-		tail = temp;
-		temp = nullptr;
+		head = newNode;
+		tail = newNode;
+		newNode = nullptr;
 	}
 	else
 	{
-		tail->next = temp;
-		tail = temp;
+		tail->setNext(newNode);
+		tail = newNode;
 	}
 }
 
-void LinkedList::insertFront(Tile *tile)
+void LinkedList::insertBack(Tile* tile)		//Works
 {
-	Node *insertNode = new Node(tile, this -> head);
-	this -> head = insertNode;
+	Node* newNode = new Node(tile, nullptr);
+	Node* currNode = new Node(nullptr, nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
+	currNode = head;
+
+	while (currNode->getNext()!=NULL)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	prevNode->setNext(newNode);
+	newNode->setNext(currNode);
 }
 
-void LinkedList::insertPosition(int pos, Tile* tile)
+void LinkedList::insertPosition(int pos, Tile* tile)	//Works
 {
-	Node *pre = new Node();
-	Node *cur = new Node();
-	Node *temp = new Node();
-	cur = head;
+	Node* newNode = new Node(tile, nullptr);
+	Node* currNode = new Node(nullptr, nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
+	currNode = head;
+
 	for (int i = 1; i < pos; i++)
 	{
-		pre = cur;
-		cur = cur->next;
+		prevNode = currNode;
+		currNode = currNode->getNext();
 	}
-	temp -> tile;
-	pre -> next = temp;
-	temp -> next = cur;
+	prevNode->setNext(newNode);
+	newNode->setNext(currNode);
 }
 
-void LinkedList::deleteFront(){
-	
-}
-
-void LinkedList::deletePosition(int pos)
+void LinkedList::deleteFront()	//Works 
 {
-	// Node *current = new Node();
-	// Node *previous = new Node();
-	// current = head;
-	// for (int i = 1; i < pos; i++)
-	// {
-	// 	previous = current;
-	// 	current = current->next;
-	// }
-	// previous->next = current->next;
-
-	if(pos == 0){
-		deleteFront();
-
-	} else{
-		// assume pos > 0
-		Node* node = this -> head;
-		Node* prev = nullptr;
-		for(int count = 0; count < pos; ++count){
-			prev = node;
-			node = node -> next;
-		}
-		prev -> next = node -> next;
-		delete node;
-	}
+	Node* toDelete = head;
+	head = head->getNext();
+	delete toDelete;
 }
 
+void LinkedList::deleteBack()	//Works
+{
+	Node* currNode = new Node(nullptr, nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
+	currNode = head;
+
+	while (currNode->getNext() != NULL)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	tail = prevNode;
+	prevNode->setNext(NULL);
+	delete currNode;
+}
+
+void LinkedList::deletePosition(int pos)	//Works
+{
+	Node* currNode = new Node(nullptr,nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
+	currNode = head;
+	if (pos == 1)
+	{
+		deleteFront();
+		return;
+	}
+	for (int i = 1; i < pos; i++)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	prevNode->setNext(currNode->getNext());
+	delete currNode;
+}
+
+Tile* LinkedList::getTile(int pos)	//Works 
+{
+	Node* currNode = nullptr;
+	Node* prevNode = nullptr;
+	currNode = this->head;
+	for (int i = 1; i < pos; i++)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	return currNode->getTile();
+}
+
+void LinkedList::clear()	//ERROR
+{
+	Node* clearNode = this->head;
+	while (clearNode != nullptr)
+	{
+		Node* toDelete = clearNode;
+		clearNode = toDelete->getNext();
+		delete toDelete;
+	}
+	tail = nullptr;
+	delete tail;
+}
+
+int LinkedList::size()	//Works 
+{
+	int size = 0;
+	Node* countNode = head;
+	while (countNode != nullptr)
+	{
+		size++;
+		countNode = countNode->getNext();
+	}
+	return size;
+}
+
+void LinkedList::display()	//Works and for testing only
+{
+	Node* currNode = this->head;
+	while (currNode != nullptr)
+	{
+		std::cout << "Colour : " << currNode->getTile()->getColour() <<
+			" Shape: " << currNode->getTile()->getShape() << "\n";
+		currNode = currNode -> getNext();
+	}
+}
