@@ -1,10 +1,13 @@
-#include "Tile.h"
-#include "Node.h"
+#pragma once
+#include "LinkedList.h"
 
 class Bag
 {
-private:
-	Tile bagArray [72];
 public:
 	void fillBag();
+	void shuffleBag();
+	LinkedList bagLinkedList;
+private:
+	LinkedList firstLinkedList;
+	LinkedList secondLinkedList;
 };

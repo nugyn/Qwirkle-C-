@@ -1,6 +1,6 @@
-
 #include "LinkedList.h"
-
+#include "Tile.h"
+#include "Bag.h"
 #include <iostream>
 
 #define EXIT_SUCCESS    0

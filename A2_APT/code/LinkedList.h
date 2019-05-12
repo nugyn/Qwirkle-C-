@@ -1,39 +1,29 @@
-
-#ifndef ASSIGN2_LINKEDLIST_H
-#define ASSIGN2_LINKEDLIST_H
-
-#include <memory>
+#pragma once
 #include "Node.h"
 
-class LinkedList {
+class LinkedList
+{
+
 public:
+	LinkedList();
+	~LinkedList();
 
-   LinkedList();
-   ~LinkedList();
-   LinkedList(LinkedList &other);
+	void insertFront(Tile* tile);	
+	void insertBack(Tile* tile);
+	void insertPosition(int pos, Tile* tile);
 
-   int size();
-   void clear();
-   void insertTile(Tile* tile);
+	void deleteFront();
+	void deleteBack();
+	void deletePosition(int pos);
 
-   void insertFront(Tile* tile);
-   void insertPosition(int pos, Tile* tile);
-   void insertBack(Node* node, Tile* tile);
+	Tile* getTile(int pos);
+	void clear();
+	int size();
+	void display();
 
-   void deleteFront();
-   void deleteBack();
-   void deletePosition(int pos);
 
-   std::string printList();
 
 private:
-   Node* head;
-   Node* tail;
-   int size(Node* node);
-   Node* insertBack(Tile *tile);
-
-   //std::shared_ptr<Node> head;
-   //std::shared_ptr<Node> tail;
+	Node* head;
+	Node* tail;
 };
-
-#endif // ASSIGN2_LINKEDLIST_H
