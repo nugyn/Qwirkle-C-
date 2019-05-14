@@ -8,7 +8,6 @@ public:
     LinkedList hand;
 
     Player(std::string name);
-    Player(std::string name, LinkedList hand);
     ~Player();
 
     // Testing method, sets hand to given LinkedList
@@ -29,7 +28,8 @@ public:
 
     // Adds tile to hand
     void addTile(Tile tile);
-    // Gets tile from hand
+    // Returns pointer to tile with corresponding colour
+    // and shape. Could use hash for quick check?
     Tile* getTile(Colour color, Shape shape);
     // Removes tile from hand
     void removeTile(Tile* tile);
