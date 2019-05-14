@@ -41,6 +41,9 @@ Player::getName(){
 }
 
 Player::addTile(Tile tile){
+  if(hand.size() == 0){
+    hand.insertFront(tile);
+  }
   hand.insertBack(tile);
 }
 
