@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
+
 #include "Node.h"
 
 class LinkedList
@@ -15,6 +17,7 @@ public:
 	void deleteFront();
 	void deleteBack();
 	void deleteNode(Tile * tile);
+	void deletePosition(int pos);
 
 	Tile* getTile(Tile* tile);
 	void clear();
@@ -27,3 +30,5 @@ private:
 	Node* head;
 	Node* tail;
 };
+
+#endif // LINKEDLIST_H

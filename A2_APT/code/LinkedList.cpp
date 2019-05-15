@@ -116,6 +116,25 @@ void LinkedList::deleteNode(Tile *tile) //Works
 	delete toDelete;
 }
 
+void LinkedList::deletePosition(int pos){
+	Node* currNode = new Node(nullptr,nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
+	currNode = head;
+	if (pos == 1)
+	{
+		deleteFront();
+		return;
+	}
+	for (int i = 1; i < pos; i++)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	prevNode->setNext(currNode->getNext());
+	delete currNode;
+}
+
+}
 Tile *LinkedList::getTile(Tile *tile) //Works
 {
 	Node *currNode = nullptr;
