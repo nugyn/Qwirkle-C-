@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NODE_H
+#define NODE_H
 #include "Tile.h"
 
 class Node
@@ -23,3 +24,5 @@ private:
 	Node* next;
 	Node* prev;
 };
+
+#endif // NODE_H
