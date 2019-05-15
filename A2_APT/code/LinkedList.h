@@ -20,6 +20,8 @@ public:
 	void deletePosition(int pos);
 
 	Tile* getTile(Tile* tile);
+	Tile* getTile(int pos);
+
 	void clear();
 	int size();
 	void display();
