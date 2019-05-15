@@ -1,6 +1,8 @@
 
 #include "LinkedList.h"
 #include "GameEngine.h"
+#include "Player.h"
+#include "Bag.h"
 
 #include <iostream>
 
@@ -8,6 +10,7 @@
 #define NUMBER_OF_PLAYERS 2
 #define MAX_LENGTH        26
 #define MAX_WIDTH         26
+#define HANDSIZE          6
 
 void mainMenu();
 void printMenu();
@@ -81,11 +84,14 @@ void menuSelect(char input){
 }
 
 void newGame(){
-    //TO DO
     bool validName = false;
     std::string playerNames[NUMBER_OF_PLAYERS] = {"", ""};
+    Player** players = new Player*[NUMBER_OF_PLAYERS];
     std::regex nameFormat("^[a-zA-Z]+");
     std::cout << "Starting A New Game\n\n";
+    Bag* bagPtr = new Bag();
+    bagPtr->fillBag();
+    //Make the players and give them their hands
     for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
         std::cout << "Enter a name for player " << i + 1 << "\n";
         while(!validName){
@@ -93,6 +99,18 @@ void newGame(){
             std::cin >> playerNames[i];
             if(std::regex_match(playerNames[i], nameFormat)){
                 validName = true;
+                LinkedList* hand = new LinkedList();
+                //populate the hand with new tiles and delete the tiles in the bag
+                for(int j = 0; j < HANDSIZE; j++){
+                    //counting (wrongly) starts at 1
+                    int shape = bagPtr->getTiles()->getTile(j)->getShape();
+                    int colour = bagPtr->getTiles()->getTile(j)->getColour();
+                    Tile* temp = new Tile(colour, shape);
+                    std::cout << temp->getColour() << temp->getShape() << "\n";
+                    bagPtr->getTiles()->deleteFront();
+                    hand->insertFront(temp);
+                }
+                players[i] = new Player(playerNames[i], hand);
             }
             else{
                 std::cout << "Only letters allowed \n";
@@ -103,7 +121,6 @@ void newGame(){
     std::cout << std::endl;
     std::cout << "Let's Play\n";
     //These are just test values to be changed with the real objects
-    std::string bag = "I'm a bag";
     TilePtr** board = new TilePtr*[MAX_LENGTH];
     for(int i = 0; i < MAX_LENGTH; ++i)
             board[i] = new TilePtr[MAX_WIDTH];
@@ -114,9 +131,8 @@ void newGame(){
             board[i][j] = nullptr;
         }
     }
-    std::cout << "test2\n";
     //make the whole board nullptr
-    GameEngine* gameEnginePtr = new GameEngine(playerNames[0],playerNames[1] , boardPtr, bag);
+    GameEngine* gameEnginePtr = new GameEngine(players[0], players[1] , boardPtr, bagPtr);
     gameEnginePtr->newGame();
     delete gameEnginePtr;
     //loop through to delete?

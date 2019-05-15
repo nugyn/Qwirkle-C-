@@ -10,6 +10,7 @@ public:
 	void fillBag();
 	void shuffleBag();
 	LinkedList bagLinkedList;
+    LinkedList* getTiles();
 private:
 	LinkedList firstLinkedList;
 	LinkedList secondLinkedList;

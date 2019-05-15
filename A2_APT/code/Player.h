@@ -1,3 +1,6 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "LinkedList.h"
 #include <string>
 
@@ -37,4 +40,6 @@ public:
 
   private:
     Tile* findTile(Colour colour, Shape shape);
-}
+};
+
+#endif // PLAYER_H
