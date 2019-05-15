@@ -156,6 +156,20 @@ Tile *LinkedList::getTile(Tile *tile) //Works
 	return returnTile;
 }
 
+Tile* LinkedList::getTile(int pos)	//Works 
+{
+	Node* currNode = nullptr;
+	Node* prevNode = nullptr;
+	currNode = this->head;
+	for (int i = 1; i < pos; i++)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	return currNode->getTile();
+}
+
+
 void LinkedList::clear() //ERROR
 {
 	Node *clearNode = this->head;
