@@ -84,7 +84,6 @@ void LinkedList::deleteBack() //Works
 	{
 		prevNode = currNode;
 		currNode = currNode->getNext();
-		s
 	}
 	tail = prevNode;
 	prevNode->setNext(NULL);
