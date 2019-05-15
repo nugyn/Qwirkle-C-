@@ -1,66 +1,83 @@
 #include "Player.h";
 
-Player::Player(std::string name){
-  this -> name = name;
+using namespace std;
+Player::Player(std::string name)
+{
+  this->name = name;
 }
 
-Player::Player(std::string name, LinkedList hand){
-  this -> name = name;
-  this -> hand = hand;
+Player::Player(std::string name, LinkedList* hand)
+{
+  this->name = name;
+  this->hand = hand;
 }
 
-Player::~Player(){
-
+Player::~Player()
+{
 }
 
-Player::setHand(LinkedList hand){
-  this -> hand = hand;
+void Player::setHand(LinkedList* hand)
+{
+  this->hand = hand;
 }
 
-Player::setPoints(int points){
-  this -> points = points;
+void Player::setPoints(int points)
+{
+  this->points = points;
 }
 
-Player::addPoints(int points){
-  this -> points += points;
+void Player::addPoints(int points)
+{
+  this->points += points;
 }
 
-Player::getHand(){
-  LinkedList* handPtr = &hand;
+LinkedList* Player::getHand()
+{
+  LinkedList *handPtr = &hand;
   return handPtr;
 }
 
-Player::getPoints(){
-  int* pointsPtr = &points;
+int* Player::getPoints()
+{
+  int *pointsPtr = &points;
   return pointsPtr;
 }
 
-Player::getName(){
-  std::string* namePtr = &name;
+string* Player::getName()
+{
+  string *namePtr = &name;
   return namePtr;
 }
 
-Player::addTile(Tile tile){
-  if(hand.size() == 0){
-    hand.insertFront(tile);
+void Player::addTile(Tile* tile)
+{
+  if (hand -> size() == 0)
+  {
+    hand -> insertFront(tile);
   }
-  hand.insertBack(tile);
+  hand -> insertBack(tile);
 }
 
-Player::removeTile(Colour colour, Shape shape){
-  return findTile(colour, shape);
+void Player::removeTile(Colour colour, Shape shape)
+{
+  Tile* removeTile = findTile(colour, shape);
+  hand -> deleteNode(removeTile);
+
 }
 
 // Moved out in case it would be needed for any other method, if not
 // could move back into removeTile.
-Player::findTile(Colour colour, Shape shape){
+Tile* Player::findTile(Colour colour, Shape shape)
+{
   // Don't like exit condition for this loop, will discuss a better solution
-  Tile* foundTile = nullptr;
-  for(int i = 1; i < hand.size(); ++i){
-    Tile* tempTile = hand.getTile(i);
-    if(tempTile.colour == colour && tempTile.shape == shape){
+  Tile *foundTile = nullptr;
+  for (int i = 1; i < hand -> size(); ++i)
+  {
+    Tile *tempTile = hand -> getTile(i);
+    if (tempTile -> getColour() == colour && tempTile -> getShape() == shape)
+    {
       foundTile = tempTile;
-      i = hand.size();
+      i = hand -> size();
     }
   }
   return foundTile;
