@@ -13,7 +13,7 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
-	//clear();	//Clear is still not working as expected
+	clear();
 }
 
 void LinkedList::insertFront(Tile *tile) //Works

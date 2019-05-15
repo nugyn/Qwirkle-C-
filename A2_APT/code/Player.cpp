@@ -33,8 +33,7 @@ void Player::addPoints(int points)
 
 LinkedList* Player::getHand()
 {
-  LinkedList *handPtr = &hand;
-  return handPtr;
+  return hand;
 }
 
 int* Player::getPoints()
