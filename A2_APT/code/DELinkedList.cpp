@@ -28,11 +28,12 @@ LinkedList::LinkedList(LinkedList &other){
 
 void LinkedList::clear()
 {
-	while (this->head != nullptr)
+	Node* clearNode = head;
+	while (clearNode != nullptr)
 	{
-		Node *toDelete = this->head;
-		head = toDelete->getNext();
-		delete head;
+		Node *toDelete = clearNode;
+		clearNode = toDelete->getNext();
+		delete toDelete;
 	}
 	tail = nullptr;
 	delete tail;
@@ -214,7 +215,11 @@ string LinkedList::printList(){
 	Node* currNode = this -> head;
 	while (currNode != nullptr)
 	{
+
+		Tile* tile = currNode -> getTile();
 		currNode = currNode -> getNext();
+	
+		//cout << 
 	}
 
 
