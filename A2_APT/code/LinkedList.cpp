@@ -5,6 +5,7 @@
 //This is a DELinked list
 //!!!!!!!!!!!!!!!!!!!!!!!
 
+
 LinkedList::LinkedList()
 {
 	head = nullptr;
@@ -13,12 +14,12 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
-	clear();
+	//clear();	//Clear is still not working as expected 
 }
 
-void LinkedList::insertFront(Tile *tile) //Works
+void LinkedList::insertFront(Tile* tile)	//Works
 {
-	Node *newNode = new Node(tile, nullptr);
+	Node* newNode = new Node(tile, nullptr);
 	newNode->getTile()->setColour(tile->getColour());
 	newNode->getTile()->setShape(tile->getShape());
 	newNode->setNext(nullptr);
@@ -35,14 +36,14 @@ void LinkedList::insertFront(Tile *tile) //Works
 	}
 }
 
-void LinkedList::insertBack(Tile *tile) //Works
+void LinkedList::insertBack(Tile* tile)		//Works
 {
-	Node *newNode = new Node(tile, nullptr);
-	Node *currNode = new Node(nullptr, nullptr);
-	Node *prevNode = new Node(nullptr, nullptr);
+	Node* newNode = new Node(tile, nullptr);
+	Node* currNode = new Node(nullptr, nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
 	currNode = head;
 
-	while (currNode->getNext() != NULL)
+	while (currNode->getNext()!=NULL)
 	{
 		prevNode = currNode;
 		currNode = currNode->getNext();
@@ -51,11 +52,11 @@ void LinkedList::insertBack(Tile *tile) //Works
 	newNode->setNext(currNode);
 }
 
-void LinkedList::insertPosition(int pos, Tile *tile) //Works
+void LinkedList::insertPosition(int pos, Tile* tile)	//Works
 {
-	Node *newNode = new Node(tile, nullptr);
-	Node *currNode = new Node(nullptr, nullptr);
-	Node *prevNode = new Node(nullptr, nullptr);
+	Node* newNode = new Node(tile, nullptr);
+	Node* currNode = new Node(nullptr, nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
 	currNode = head;
 
 	for (int i = 1; i < pos; i++)
@@ -67,82 +68,65 @@ void LinkedList::insertPosition(int pos, Tile *tile) //Works
 	newNode->setNext(currNode);
 }
 
-void LinkedList::deleteFront() //Works
+void LinkedList::deleteFront()	//Works 
 {
-	Node *toDelete = head;
+	Node* toDelete = head;
 	head = head->getNext();
 	delete toDelete;
 }
 
-void LinkedList::deleteBack() //Works
+void LinkedList::deleteBack()	//Works
 {
-	Node *currNode = new Node(nullptr, nullptr);
-	Node *prevNode = new Node(nullptr, nullptr);
+	Node* currNode = new Node(nullptr, nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
 	currNode = head;
 
 	while (currNode->getNext() != NULL)
 	{
 		prevNode = currNode;
 		currNode = currNode->getNext();
-		s
 	}
 	tail = prevNode;
 	prevNode->setNext(NULL);
 	delete currNode;
 }
 
-void LinkedList::deleteNode(Tile *tile) //Works
+void LinkedList::deletePosition(int pos)	//Works
 {
-	Node *currNode = new Node(nullptr, nullptr);
-	Node *prevNode = new Node(nullptr, nullptr);
+	Node* currNode = new Node(nullptr,nullptr);
+	Node* prevNode = new Node(nullptr, nullptr);
 	currNode = head;
-	Node* toDelete = new Node(nullptr, nullptr);
-
-	while(currNode != nullptr)
+	if (pos == 1)
 	{
-		if(currNode -> getTile() -> getColour() == tile -> getColour() && currNode -> getTile() -> getShape() == tile -> getShape())
-		{
-			toDelete = currNode;
-			prevNode = currNode;
-			prevNode->setNext(currNode->getNext());
-			currNode = nullptr;
-		}
-		else
-		{
-			prevNode = currNode;
-			currNode = currNode->getNext();
-		}
+		deleteFront();
+		return;
 	}
-	delete toDelete;
+	for (int i = 1; i < pos; i++)
+	{
+		prevNode = currNode;
+		currNode = currNode->getNext();
+	}
+	prevNode->setNext(currNode->getNext());
+	delete currNode;
 }
 
-Tile *LinkedList::getTile(Tile *tile) //Works
+Tile* LinkedList::getTile(int pos)	//Works 
 {
-	Node *currNode = nullptr;
-	Node *prevNode = nullptr;
+	Node* currNode = nullptr;
 	currNode = this->head;
-	Tile *returnTile;
-	while (currNode != nullptr)
+	for (int i = 1; i < pos; i++)
 	{
-		if (currNode->getTile()->getShape() == tile->getShape() && currNode->getTile()->getColour() == tile->getColour())
-		{
-			returnTile = currNode->getTile();
-		}
-		else
-		{
-			prevNode = currNode;
-			currNode = currNode->getNext();
-		}
+		currNode = currNode->getNext();
 	}
-	return returnTile;
+	return currNode->getTile();
 }
 
-void LinkedList::clear() //ERROR
+void LinkedList::clear()	//ERROR
 {
-	Node *clearNode = this->head;
+	Node* clearNode = this->head;
 	while (clearNode != nullptr)
 	{
-		Node *toDelete = clearNode;
+		Node* toDelete = clearNode;
 		clearNode = toDelete->getNext();
 		delete toDelete;
 	}
@@ -150,10 +134,10 @@ void LinkedList::clear() //ERROR
 	delete tail;
 }
 
-int LinkedList::size() //Works
+int LinkedList::size()	//Works 
 {
 	int size = 0;
-	Node *countNode = head;
+	Node* countNode = head;
 	while (countNode != nullptr)
 	{
 		size++;
@@ -162,12 +146,13 @@ int LinkedList::size() //Works
 	return size;
 }
 
-void LinkedList::display() //Works and for testing only
+void LinkedList::display()	//Works and for testing only
 {
-	Node *currNode = this->head;
+	Node* currNode = this->head;
 	while (currNode != nullptr)
 	{
-		std::cout << "Colour : " << currNode->getTile()->getColour() << " Shape: " << currNode->getTile()->getShape() << "\n";
-		currNode = currNode->getNext();
+		std::cout << "Colour : " << currNode->getTile()->getColour() <<
+			" Shape: " << currNode->getTile()->getShape() << "\n";
+		currNode = currNode -> getNext();
 	}
 }

@@ -1,5 +1,8 @@
-#pragma once
+#ifndef BAG_H
+#define BAG_H
+
 #include "LinkedList.h"
+#include "Tile.h"
 
 class Bag
 {
@@ -11,3 +14,5 @@ private:
 	LinkedList firstLinkedList;
 	LinkedList secondLinkedList;
 };
+
+#endif // BAG_H
