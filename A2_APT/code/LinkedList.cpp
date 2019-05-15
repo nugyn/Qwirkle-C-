@@ -133,13 +133,12 @@ void LinkedList::deletePosition(int pos){
 	delete currNode;
 }
 
-}
-Tile *LinkedList::getTile(Tile *tile) //Works
+
+Tile* LinkedList::getTile(Tile *tile) //Works
 {
 	Node *currNode = nullptr;
-	Node *prevNode = nullptr;
 	currNode = this->head;
-	Tile *returnTile;
+	Tile *returnTile = nullptr;
 	while (currNode != nullptr)
 	{
 		if (currNode->getTile()->getShape() == tile->getShape() && currNode->getTile()->getColour() == tile->getColour())
@@ -148,7 +147,6 @@ Tile *LinkedList::getTile(Tile *tile) //Works
 		}
 		else
 		{
-			prevNode = currNode;
 			currNode = currNode->getNext();
 		}
 	}
@@ -158,11 +156,9 @@ Tile *LinkedList::getTile(Tile *tile) //Works
 Tile* LinkedList::getTile(int pos)	//Works 
 {
 	Node* currNode = nullptr;
-	Node* prevNode = nullptr;
 	currNode = this->head;
 	for (int i = 1; i < pos; i++)
 	{
-		prevNode = currNode;
 		currNode = currNode->getNext();
 	}
 	return currNode->getTile();
