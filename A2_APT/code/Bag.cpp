@@ -62,7 +62,8 @@ void Bag::shuffleBag()
 }
 LinkedList* Bag::getTiles(){
 
-    LinkedList* tilesPtr = new LinkedList(bagLinkedList);
+    LinkedList* tilesPtr = new LinkedList();
+    tilesPtr = &bagLinkedList;
     return tilesPtr;
     
 }

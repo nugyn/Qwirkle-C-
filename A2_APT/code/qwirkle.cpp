@@ -91,6 +91,7 @@ void newGame(){
     std::cout << "Starting A New Game\n\n";
     Bag* bagPtr = new Bag();
     bagPtr->fillBag();
+
     //Make the players and give them their hands
     for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
         std::cout << "Enter a name for player " << i + 1 << "\n";
@@ -102,13 +103,12 @@ void newGame(){
                 LinkedList* hand = new LinkedList();
                 //populate the hand with new tiles and delete the tiles in the bag
                 for(int j = 0; j < HANDSIZE; j++){
-                    //counting (wrongly) starts at 1
-                    int shape = bagPtr->getTiles()->getTile(j)->getShape();
-                    int colour = bagPtr->getTiles()->getTile(j)->getColour();
+                    int shape = bagPtr->getTiles()->getTile(0)->getShape();
+                    int colour = bagPtr->getTiles()->getTile(0)->getColour();
                     Tile* temp = new Tile(colour, shape);
-                    std::cout << temp->getColour() << temp->getShape() << "\n";
                     bagPtr->getTiles()->deleteFront();
                     hand->insertFront(temp);
+                    
                 }
                 players[i] = new Player(playerNames[i], hand);
             }
@@ -118,9 +118,8 @@ void newGame(){
         }
         validName = false;
     }
-    std::cout << std::endl;
+    std::cout << "\n";
     std::cout << "Let's Play\n";
-    //These are just test values to be changed with the real objects
     TilePtr** board = new TilePtr*[MAX_LENGTH];
     for(int i = 0; i < MAX_LENGTH; ++i)
             board[i] = new TilePtr[MAX_WIDTH];
