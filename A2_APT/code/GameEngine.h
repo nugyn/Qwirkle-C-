@@ -8,6 +8,7 @@
 #define HANDSIZE 6
 #define REPLACE_COLOUR 8
 #define REPLACE_SHAPE 9
+#define MAX_MAP_LENGTH 26 
 
 
 class GameEngine{

@@ -1,4 +1,3 @@
-
 #include "LinkedList.h"
 #include "GameEngine.h"
 #include "Player.h"
@@ -135,7 +134,7 @@ void newGame(){
     gameEnginePtr->newGame();
     delete gameEnginePtr;
     //loop through to delete?
-    delete board;
+    delete[] board;
 
     
 }

@@ -52,7 +52,7 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
     bool valid = false;
     
 
-    //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE)
+    //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     //now gets the input from the user and puts it into both inputPtr AND the toTest string
@@ -94,9 +94,27 @@ void GameEngine::playerMove(){
 
 //prints current board state
 void GameEngine::printBoard(){
-    
-    std::cout << "BOARD HERE\n";
 
+    //if anyone can do anything more elegant please do so
+    std::cout << "   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25\n";
+    std::cout << "   ------------------------------------------------------------------------------";
+    //primitive data types ;)
+    char letters = 'A';
+    for(int i = 0; i < MAX_MAP_LENGTH; i++){
+        std::cout << "\n" << letters << " |";
+        letters++;
+        for(int j = 0; j < MAX_MAP_LENGTH; j++){
+            if((*boardPtr)[i][j]==nullptr){
+                std::cout << "  |";
+            }
+            else{
+                Colour colour = (*boardPtr)[i][j]->getColour();
+                Shape shape = (*boardPtr)[i][j]->getShape();
+                std::cout << colour << shape << "|";
+               }
+        }
+    }
+    std::cout << "\n   ------------------------------------------------------------------------------";
 }
 
 //displays all game details
@@ -107,7 +125,7 @@ void GameEngine::printGameStatus(){
     std::cout << "Score for " << *player2->getName() << " " << *player2->getPoints() << "\n";
     this->printBoard();
     std::cout << "\nYour hand is\n";
-    for(int i = 1; i < HANDSIZE + 1; i++){
+    for(int i = 1; i <= HANDSIZE; i++){
         Tile* handTile = activePlayer->getHand()->getTile(i);
         std::cout << handTile->getColour() << handTile->getShape() << ",";
     }
@@ -126,7 +144,6 @@ bool GameEngine::placeTile(std::string* inputPtr){
 bool GameEngine::replaceTile(std::string* inputPtr){
 
     //get active player hand
-    std::cout << "start of replace tile\n";
     LinkedList* playerHand = activePlayer->getHand();
     LinkedList* bagTiles = bag->getTiles();
     //check if tile requested exists in hand

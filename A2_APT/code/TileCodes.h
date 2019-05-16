@@ -1,4 +1,4 @@
-#ifndef TILESCODES_H
+#ifndef TILECODES_H
 #define TILECODES_H
 
 // Colours
@@ -20,4 +20,4 @@
 // TilePointer
 #define TilePtr Tile*
 
-#endif // TILESCODES_H
+#endif // TILECODES_H

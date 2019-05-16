@@ -174,6 +174,7 @@ void LinkedList::clear() //ERROR
 		delete toDelete;
 	}
 	tail = nullptr;
+    head = nullptr;
 	delete tail;
 }
 
