@@ -1,6 +1,4 @@
-
-#ifndef ASSIGN1_TILECODES_H
-#define ASSIGN1_TILECODES_H
+#pragma once
 
 // Colours
 #define RED    'R'
@@ -17,5 +15,3 @@
 #define SQUARE    4
 #define STAR_6    5
 #define CLOVER    6
-
-#endif // ASSIGN1_TILECODES_H

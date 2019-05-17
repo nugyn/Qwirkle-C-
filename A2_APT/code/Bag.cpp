@@ -1,39 +1,63 @@
-#include <iostream>
-#include <random>
 #include "Bag.h"
 #include "TileCodes.h"
-#include "LinkedList.h"
+#include <time.h>
+#include <stdlib.h>  
 
 void Bag::fillBag()
 {
-	Tile* tempTile = new Tile(NULL, NULL);
-
-	for (int i = 0; i != 72; i++)
-	{
-		tempTile->shape = (i % 6) + 1;
-
-		if (i < 12)
-			tempTile->colour = RED;
-		if (i >= 12 && i < 24)
-			tempTile->colour = ORANGE;
-		if (i >= 24 && i < 36)
-			tempTile->colour = YELLOW;
-		if (i >= 36 && i < 48)
-			tempTile->colour = GREEN;
-		if (i >= 48 && i < 60)
-			tempTile->colour = BLUE;
-		if (i >= 60 && i < 72)
-			tempTile->colour = PURPLE;
-
-		bagArray[i] = *tempTile;
-	}
-	std::random_shuffle(&bagArray[0], &bagArray[72]);
-	LinkedList linkedList;
-	
 	for (int i = 0; i < 72; i++)
 	{
-		linkedList.createTile(&bagArray[i]);
+		Tile* tempTile = new Tile(NULL, NULL);
+		tempTile->setShape((i % 6) + 1);
+
+		if (i < 12)
+			tempTile->setColour(RED);
+		if (i >= 12 && i < 24)
+			tempTile->setColour(ORANGE);
+		if (i >= 24 && i < 36)
+			tempTile->setColour(YELLOW);
+		if (i >= 36 && i < 48)
+			tempTile->setColour(GREEN);
+		if (i >= 48 && i < 60)
+			tempTile->setColour(BLUE);
+		if (i >= 60 && i < 72)
+			tempTile->setColour(PURPLE);
+	
+		firstLinkedList.insertFront(tempTile);
 	}
+	shuffleBag();
+}
 
-
+void Bag::shuffleBag()
+{
+	if (firstLinkedList.size() != 0)
+	{
+		int randSelect = 0;
+		int randMax = firstLinkedList.size();
+		srand(time(NULL));
+		while (randMax != 0)
+		{
+			randMax = firstLinkedList.size();
+			randSelect = rand() % randMax + 1;
+			secondLinkedList.insertFront(firstLinkedList.getTile(randSelect));
+			firstLinkedList.deletePosition(randSelect);
+			randMax--;
+		}
+		bagLinkedList = secondLinkedList;
+	}
+	else
+	{
+		int randSelect = 0;
+		int randMax = secondLinkedList.size();
+		srand(time(NULL));
+		while (randMax != 0)
+		{
+			randMax = secondLinkedList.size();
+			randSelect = rand() % randMax + 1;
+			firstLinkedList.insertFront(secondLinkedList.getTile(randSelect));
+			secondLinkedList.deletePosition(randSelect);
+			randMax--;
+		}
+		bagLinkedList = firstLinkedList;
+	}
 }

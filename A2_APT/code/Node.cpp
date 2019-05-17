@@ -1,60 +1,46 @@
-
 #include "Node.h"
 
-Node::Node(Tile *tile, Node* next)
+Node::Node(Tile* tileVal, Node* nextVal)
 {
-    this->tile = tile;
-    this->next = next;
+	this->tile = tileVal;
+	this->next = nextVal;
+	this->prev = nullptr;
 }
 
-Node::Node(Tile *tile, Node* next, Node* prev)
+Node::Node(Tile* tileVal, Node* nextVal, Node* prevVal)
 {
-    this->tile = tile;
-    this->next = next;
-    this->prev = prev;
+	this->tile = tileVal;
+	this->next = nextVal;
+	this->prev = prevVal;
 }
 
-Node::Node(Node &other)
-{
-    this -> tile = other.tile;
-    this -> next = other.next;
-    this -> prev = other.prev;
-}
-
-//TO DO: Deconstructor
 Node::~Node()
 {
-    delete tile;
-    delete next;
 }
 
-bool Node::setHeader()
+
+Node* Node::getNext()
 {
-    this->isHeader = true;
-    return true;
+	return this->next;
 }
 
-Node *Node::getPrev()
+Node* Node::getPrev()
 {
-    return prev;
+	return this->prev;
 }
 
-Node *Node::getNext()
+void Node::setPrev(Node* prevVal)
 {
-    return next;
+	prev = prevVal;
 }
 
-void Node::setNext(Node *next)
+void Node::setNext(Node* nextVal)
 {
-    next = next;
+	next = nextVal;
 }
 
-void Node::setPrev(Node *prev)
+Tile* Node::getTile()
 {
-    prev = prev;
-}
-
-Tile* Node::getTile(){
-    return tile;
+	return this->tile;
 }
 
