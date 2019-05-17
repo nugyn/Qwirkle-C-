@@ -63,30 +63,34 @@ SaveGame readFile(string fileName)
         string currentPlayer;
     };
 
-    saveGame sg;
+    SaveGame sg;
     string value = "";
     string board = "";
     int playerPos = 1;
     int currentPlayer = 1;
-    int boardPos = 6;
+    int boardPos = 9;
     int other = 0;
+    bool boardFill = false;
     for (std::string line; getline(inFile, line);)
     {
-        if ((playerPos % 3) == 2)
+        if ((playerPos % 3) == 1) //read first line
         {
             string value = line;
-            if(currentPlayer == 1){
-            sg.playerName1 = value;
-            ++playerPos;
+            if (currentPlayer == 1)
+            {
+                sg.playerName1 = value;
+                ++playerPos;
             }
-            else if(currentPlayer == 2){
+            else if (currentPlayer == 2)
+            {
                 sg.playerName2 = value;
                 ++playerPos;
             }
         }
-        else if ((playerPos % 2) == 1)
+        else if ((playerPos % 3) == 2) //read second line
         {
-            if(currentPlayer == 1){
+            if (currentPlayer == 1)
+            {
                 int number;
                 std::istringstream iss(line);
                 iss >> number;
@@ -96,7 +100,8 @@ SaveGame readFile(string fileName)
                     ++playerPos;
                 }
             }
-            else if(currentPlayer == 2){
+            else if (currentPlayer == 2)
+            {
                 int number;
                 std::istringstream iss(line);
                 iss >> number;
@@ -107,65 +112,106 @@ SaveGame readFile(string fileName)
                 }
             }
         }
-        else if ((playerPos % 3) == 0)
+        else if ((playerPos % 3) == 0) //read third line
         {
             string value = line;
 
-            if(currentPlayer == 1){
+            if (currentPlayer == 1)
+            {
                 sg.playerHand1 = value;
-                playerPos = 0;
+                playerPos = 1;
+                ++currentPlayer;
             }
-            else if(currentPlayer == 2){
+            else if (currentPlayer == 2)
+            {
                 sg.playerHand2 = value;
-                playerPos = 0;
+                playerPos = 1;
+                currentPlayer = 3;
+                value = "It's done";
             }
-            ++currentPlayer;
         }
-       
+        //std::cout << value << "|" <<currentPlayer << std::endl;
+        if (currentPlayer > 2 && boardFill == true)
+        {
+                
+            if(boardPos == 9){
+                --boardPos;
+            }
+            else if (boardPos == 8)
+            {
+                sg.board += line + "\n";
 
-        if (boardPos == 8)
-         {
-            board = line + "\n";
-            --boardPos;
-         }
-        else if(boardPos == 7){
-            board = line + "\n";
-            --boardPos;
-        }
-        else if(boardPos == 6){
-            board = line + "\n";
-            --boardPos;
-        }
-        else if(boardPos == 5){
-            board = line + "\n";
-            --boardPos;
-        }
-        else if(boardPos == 4){
-            board = line + "\n";
-            --boardPos;
-        }
-        else if(boardPos == 3){
-            board = line + "\n";
-            --boardPos;
-        }
-        else if(boardPos == 2){
-            board = line + "\n";
-            --boardPos;
-        }
-        else if(boardPos == 1){
-            board = line;
-            boardPos == 0;
-            ++other;
-        }
 
-        if(other == 1){
-            sg.bag = line;
-            ++other;
+                --boardPos;
+            }
+            else if (boardPos == 7)
+            {
+                sg.board += line + "\n";
+
+
+                --boardPos;
+            }
+            else if (boardPos == 6)
+            {
+                sg.board += line + "\n";
+                --boardPos;
+            }
+            else if (boardPos == 5)
+            {
+                sg.board += line + "\n";
+                --boardPos;
+            }
+            else if (boardPos == 4)
+            {
+                sg.board += line + "\n";
+                --boardPos;
+            }
+            else if (boardPos == 3)
+            {
+                sg.board += line + "\n";
+                --boardPos;
+            }
+            else if (boardPos == 2)
+            {
+                sg.board += line + "\n";
+                --boardPos;
+            }
+            else if (boardPos == 1)
+            {
+                boardPos = -1;
+                ++other;
+            }
+
+            if (boardPos == -1)
+            {
+                if (other == 1)
+                {
+                    sg.bag = line;
+                    ++other;
+                }
+                else if (other == 2)
+                {
+                    sg.currentPlayer = line;
+                    other = -1;
+                }
+            }
         }
-        else if(other == 2){
-            sg.currentPlayer = line;
-        }
+        boardFill = true;
     }
+    // std::cout << sg.playerName1 << std::endl;
+    // std::cout << sg.playerScore1 << std::endl;
+    // std::cout << sg.playerHand1 << std::endl;
+    // std::cout << sg.playerName2 << std::endl;
+    // std::cout << sg.playerScore2 << std::endl;
+    // std::cout << sg.playerHand2 << std::endl;
+
+    std::cout << sg.board << std::endl;
+
+    std::cout << sg.bag << std::endl;
+
+    std::cout << sg.currentPlayer<< std::endl;
+
+    return sg;
 }
 
 int main()
@@ -183,6 +229,12 @@ int main()
     saveGame.bag = "A1,A2,A3,A4,A5,A6,A7";
     saveGame.currentPlayer = "Duy";
 
-    writeFile(saveGame);
+    // writeFile(saveGame);
+    SaveGame sg = readFile("savegame.txt");
+
+    // std::cout << sg.playerName1 << std::endl;
+    // std::cout << sg.playerScore1 << std::endl;
+    // std::cout << sg.playerHand1 << std::endl;
+
     return 0;
 }
