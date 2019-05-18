@@ -14,7 +14,7 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
-	//clear();	//Clear is still not working as expected 
+	clear();	
 }
 
 void LinkedList::insertFront(Tile* tile)	//Works
@@ -68,11 +68,12 @@ void LinkedList::insertPosition(int pos, Tile* tile)	//Works
 	newNode->setNext(currNode);
 }
 
-void LinkedList::deleteFront()	//Works 
+void LinkedList::deleteFront()
 {
-	Node* toDelete = head;
-	head = head->getNext();
-	delete toDelete;
+    if (head->getNext() != NULL)
+        head = head->getNext();
+    else
+        head = nullptr;
 }
 
 void LinkedList::deleteBack()	//Works
@@ -123,17 +124,16 @@ Tile* LinkedList::getTile(int pos)	//Works
 	return currNode->getTile();
 }
 
-void LinkedList::clear()	//ERROR
+void LinkedList::clear()
 {
-	Node* clearNode = this->head;
-	while (clearNode != nullptr)
-	{
-		Node* toDelete = clearNode;
-		clearNode = toDelete->getNext();
-		delete toDelete;
-	}
-	tail = nullptr;
-	delete tail;
+    this->head = nullptr;
+    Node* clearNode = this->head;
+    while (clearNode != nullptr)
+    {
+        Node* toDelete = clearNode;
+        clearNode = toDelete->getNext();
+        delete toDelete;
+    }
 }
 
 int LinkedList::size()	//Works 

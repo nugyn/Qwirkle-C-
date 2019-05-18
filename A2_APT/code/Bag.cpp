@@ -37,7 +37,6 @@ void Bag::shuffleBag()
 		srand(time(NULL));
 		while (randMax != 0)
 		{
-			randMax = firstLinkedList.size();
 			randSelect = rand() % randMax + 1;
 			secondLinkedList.insertFront(firstLinkedList.getTile(randSelect));
 			firstLinkedList.deletePosition(randSelect);
@@ -52,7 +51,6 @@ void Bag::shuffleBag()
 		srand(time(NULL));
 		while (randMax != 0)
 		{
-			randMax = secondLinkedList.size();
 			randSelect = rand() % randMax + 1;
 			firstLinkedList.insertFront(secondLinkedList.getTile(randSelect));
 			secondLinkedList.deletePosition(randSelect);
