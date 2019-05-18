@@ -1,10 +1,15 @@
 #include "LinkedList.h"
-#include "Tile.h"
+#include "GameEngine.h"
+#include "Player.h"
 #include "Bag.h"
+
 #include <iostream>
 
-#define EXIT_SUCCESS    0
-
+#define EXIT_SUCCESS      0
+#define NUMBER_OF_PLAYERS 2
+#define MAX_LENGTH        26
+#define MAX_WIDTH         26
+#define HANDSIZE          6
 
 void mainMenu();
 void printMenu();
@@ -78,37 +83,66 @@ void menuSelect(char input){
 }
 
 void newGame(){
-    //TO DO
     bool validName = false;
-    std::string playerOne = "";
-    std::string playerTwo = "";
+    std::string playerNames[NUMBER_OF_PLAYERS] = {"", ""};
+    Player** players = new Player*[NUMBER_OF_PLAYERS];
+    std::regex nameFormat("^[a-zA-Z]+");
     std::cout << "Starting A New Game\n\n";
-    // PLAYER ONE NAME
-    std::cout << "Enter a name for player 1: \n";
-    while(!validName){
-        std::cout << ">";
-        std::cin >> playerOne;
-        //DO CHECKS HERE IN AN IF STATEMENT
-        validName = true;
+    Bag* bagPtr = new Bag();
+    bagPtr->fillBag();
+
+    //Make the players and give them their hands
+    for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
+        std::cout << "Enter a name for player " << i + 1 << "\n";
+        while(!validName){
+            std::cout << ">";
+            std::cin >> playerNames[i];
+            if(std::regex_match(playerNames[i], nameFormat)){
+                validName = true;
+                LinkedList* hand = new LinkedList();
+                //populate the hand with new tiles and delete the tiles in the bag
+                for(int j = 0; j < HANDSIZE; j++){
+                    int shape = bagPtr->getTiles()->getTile(0)->getShape();
+                    int colour = bagPtr->getTiles()->getTile(0)->getColour();
+                    Tile* temp = new Tile(colour, shape);
+                    bagPtr->getTiles()->deleteFront();
+                    hand->insertFront(temp);
+                    
+                }
+                players[i] = new Player(playerNames[i], hand);
+            }
+            else{
+                std::cout << "Only letters allowed \n";
+            }
+        }
+        validName = false;
     }
-    validName = false;
     std::cout << "\n";
-    // PLAYER TWO NAME
-    std::cout << "Enter a name for player 2: \n";
-    while(!validName){
-        std::cout << ">";
-        std::cin >> playerTwo;
-        //DO CHECKS HERE IN AN IF STATEMENT
-        validName = true;
-    }
-    std::cout << std::endl;
     std::cout << "Let's Play\n";
+    TilePtr** board = new TilePtr*[MAX_LENGTH];
+    for(int i = 0; i < MAX_LENGTH; ++i)
+            board[i] = new TilePtr[MAX_WIDTH];
+    TilePtr*** boardPtr = &board;
+    //changes ALL values to nullptr
+    for(int i = 0; i < MAX_WIDTH; i++){
+        for(int j = 0; j < MAX_LENGTH; j++){
+            board[i][j] = nullptr;
+        }
+    }
+    //make the whole board nullptr
+    GameEngine* gameEnginePtr = new GameEngine(players[0], players[1] , boardPtr, bagPtr);
+    gameEnginePtr->newGame();
+    delete gameEnginePtr;
+    //loop through to delete?
+    delete[] board;
+
+    
 }
 
 void loadGame(){
     //TO DO
     std::string fileName = "";
-    std::cout << "Enter the filename you wish to load" << std::endl << ">";
+    std::cout << "Enter the filename you wish to load" << "\n" << ">";
     std::cin >> fileName;
 }
 
@@ -132,6 +166,6 @@ void showInfo(){
 
 void quit(){
     //TO DO
-    std::cout << "smell ya later" << std::endl;
+    std::cout << "smell ya later" << "\n";
     exitProgram = true;
 }

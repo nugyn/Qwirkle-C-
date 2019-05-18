@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TILE_H
+#define TILE_H
 #include "TileCodes.h"
 
 typedef char Colour;
@@ -22,3 +23,5 @@ private:
 	Colour colour;
 	Shape  shape;
 };
+
+#endif // TILE_H
