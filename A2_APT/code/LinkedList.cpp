@@ -47,8 +47,9 @@ void LinkedList::insertBack(Tile *tile) //Works
 		prevNode = currNode;
 		currNode = currNode->getNext();
 	}
-	prevNode->setNext(newNode);
-	newNode->setNext(currNode);
+    //doesnt this set the newNode to second from the back?
+	prevNode->setNext(currNode);
+	currNode->setNext(newNode);
 }
 
 void LinkedList::insertPosition(int pos, Tile *tile) //Works

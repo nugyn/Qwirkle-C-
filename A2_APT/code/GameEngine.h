@@ -34,6 +34,9 @@ class GameEngine{
     void playerMove();
     void printBoard();
     void printGameStatus();
+    bool boardXAxisLegal(char colour, int shape, int xInput, int yInput, int* points);
+    bool boardYAxisLegal(char colour, int shape, int xInput, int yInput, int* points);
+    bool checkPlacementLegality(LinkedList* listToTest);
     public:
     GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bag);
     ~GameEngine();

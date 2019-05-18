@@ -143,11 +143,16 @@ bool GameEngine::placeTile(std::string* inputPtr){
     //get artive player hand as well as the bag
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
+    int points = 0;
+    int* pointsPtr = &points;
     int tilePositionInHand = 0;
     bool isInHand = false;
     bool emptySpace = false;
     //CHANGE BACK TO FALSE WHEN DONE TESTING
-    bool legalMove = true;
+    bool legalMoveX = false;
+    bool legalMoveY = false;
+    char validColourSelect = '0';
+    int validShapeSelect = 0;
     //this next bit of code is to get the actual int for the XCOORD
     char firstDigit = (*inputPtr)[PLACE_XCOORD1];
     char secondDigit = (*inputPtr)[PLACE_XCOORD2];
@@ -177,23 +182,33 @@ bool GameEngine::placeTile(std::string* inputPtr){
         if(colour==colourSelect && shape==shapeSelect){
             isInHand = true;
             tilePositionInHand = i;
+            validColourSelect = colourSelect;
+            validShapeSelect = shapeSelect;
         }
     }
     //check if board space is empty
     if((*boardPtr)[yCoord][xCoord]==nullptr){
         emptySpace = true;
     }
-    //check if board space is legal // TO DO
+    //check if board space is legal
+    if(this->boardXAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
+        legalMoveX = true;
+    }
+    if(this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
+        legalMoveY = true;
+    }
+
+
     //if the move is completely LEGAL
-    if(isInHand && emptySpace && legalMove){
+    if(isInHand && emptySpace && legalMoveX && legalMoveY){
         //get from player hand and place tile on the board
         Tile* tileToPlace = playerHand->getTile(tilePositionInHand);
         (*boardPtr)[yCoord][xCoord] = tileToPlace;
         //remove from player hand
-        playerHand->deleteNode(tileToPlace);
+        playerHand->deletePosition(tilePositionInHand);
         //get a tile from the bag and place in player hand
         tileToPlace = bagTiles->getTile(0);
-        playerHand->insertFront(tileToPlace);
+        playerHand->insertBack(tileToPlace);
         bagTiles->deleteFront();
         return true;
 
@@ -202,8 +217,149 @@ bool GameEngine::placeTile(std::string* inputPtr){
     return false;
 
 }
-//for when the player wishes to replace a tile in their hand returns false if there is a problem
+// checks the legality along the X Axis
+bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput, int* points){
 
+    LinkedList* xAxisMove = new LinkedList();
+    bool nullPtrFound = false;
+    bool legalMove = false;
+    int counter = 1;
+    int potentialPoints = 0;
+    //inserts the slected tile into list
+    Tile* tilePtr = new Tile(colour, shape);
+    xAxisMove->insertBack(tilePtr);
+    //iterate right from input until nullptr adding to the list as we go
+    while(!nullPtrFound){
+        //if the tiles to the right of the space are not nullptr AND within the grid
+        if(!((*boardPtr)[yInput][xInput+counter]==nullptr) && (xInput+counter <= MAX_MAP_LENGTH)){
+            xAxisMove->insertBack((*boardPtr)[yInput][xInput+counter]);
+            potentialPoints++;
+        }
+        else{
+            nullPtrFound = true;
+        }
+    }
+    nullPtrFound = false;
+    counter = 1;
+    while(!nullPtrFound){
+        //if the tiles to the left of the space are not nullptr AND within the grid
+        if(!((*boardPtr)[yInput][xInput-counter]==nullptr) && (xInput-counter >= 0)){
+            xAxisMove->insertBack((*boardPtr)[yInput][xInput-counter]);
+            potentialPoints++;
+        }
+        else{
+            nullPtrFound = true;
+        }
+    }  
+
+    legalMove = this->checkPlacementLegality(xAxisMove);
+    //if it was a legal move update points
+    if(legalMove){
+        *points+=potentialPoints;
+    }
+
+    delete xAxisMove;
+    return legalMove;
+
+}
+//checks the legality down the y axis
+bool GameEngine::boardYAxisLegal(char colour, int shape, int xInput, int yInput, int* points){
+
+    LinkedList* yAxisMove = new LinkedList();
+    bool nullPtrFound = false;
+    bool legalMove = false;
+    int counter = 1;
+    int potentialPoints = 0;
+    //selected tile goes into list
+    Tile* tilePtr = new Tile(colour, shape);
+    yAxisMove->insertBack(tilePtr);
+    //iterate down until a null ptr is found (adding as we go)
+    while(!nullPtrFound){
+        //keep adding as long as there is a tile below that is within the grid
+        if(!((*boardPtr)[yInput+counter][xInput]==nullptr) && (yInput+counter <= MAX_MAP_LENGTH)){
+            yAxisMove->insertBack((*boardPtr)[yInput+counter][xInput]);
+            potentialPoints++;
+        }
+        else{
+            nullPtrFound = true;
+        }
+    }
+    nullPtrFound = false;
+    counter = 1;
+    while(!nullPtrFound){
+        if(!((*boardPtr)[yInput-counter][xInput]==nullptr) && (yInput-counter >= 0)){
+            yAxisMove->insertBack((*boardPtr)[yInput-counter][xInput]);
+            potentialPoints++;
+        }
+        else{
+            nullPtrFound = true;
+        }
+    }
+    legalMove = this->checkPlacementLegality(yAxisMove);
+    if(legalMove){
+        *points+=potentialPoints;
+    }
+    delete yAxisMove;
+    return legalMove;
+
+}
+
+bool GameEngine::checkPlacementLegality(LinkedList* listToTest){
+
+
+    bool allOneColour = true;
+    bool allOneShape = true;
+    bool uniqueColours = true;
+    bool uniqueShapes = true;
+    char testShape = listToTest->getTile(0)->getShape();
+    int testColour = listToTest->getTile(0)->getColour();
+    char allShapes[listToTest->size()+1] = {testShape}; 
+    int allColours[listToTest->size()+1] = {testColour};
+    
+    for(int i = 1; i < listToTest->size()+1; i++){
+        //check if colours are all the same
+        if(!((listToTest->getTile(i)->getColour())==testColour)){
+            allOneColour = false;
+
+        }
+        //check if shapes are all the same
+        if((!listToTest->getTile(i)->getShape())==testShape){
+            allOneShape = false;
+        }
+        allShapes[i] = listToTest->getTile(i)->getShape();
+        allColours[i] = listToTest->getTile(i)->getColour();
+    }
+    //if all one colour then we need to confirm that all shapes are different
+    if(allOneColour){
+        for(int i = 0; i < listToTest->size()+1; i++){
+            for(int j = i; j < listToTest->size()+1; j++){
+                if(allShapes[j]!=allShapes[i]){
+                    uniqueShapes = false;
+                }
+            }
+        }
+    }
+    if(allOneShape){
+        for(int i = 0; i < listToTest->size()+1; i++){
+            for(int j = i; j < listToTest->size()+1; j++){
+                if(allColours[j]!=allColours[i]){
+                    uniqueColours = false;
+                }
+            }
+        }
+    }
+
+    //the final check, we need either unique colours AND all one shape OR all one colour AND unique shape
+    if((allOneColour && uniqueShapes) || (allOneShape && uniqueColours)){
+        return true;
+    }
+    else{
+        return false;
+    }
+
+}
+
+//for when the player wishes to replace a tile in their hand returns false if there is a problem
 bool GameEngine::replaceTile(std::string* inputPtr){
 
     //get active player hand
@@ -218,21 +374,14 @@ bool GameEngine::replaceTile(std::string* inputPtr){
         //this - '0' helps us convert the char to the accurate int
         int shapeSelect = (*inputPtr)[REPLACE_SHAPE] - '0';
         if(colour==colourSelect && shape==shapeSelect){
-            std::cout << "1 TEST TEST TEST TEST\n";
             //  remove tile from hand and add to back of bag
             Tile* tile = playerHand->getTile(i);
-        std::cout << "2 TEST TEST TEST TEST\n";
             bagTiles->insertBack(tile);
-        std::cout << "3 TEST TEST TEST TEST\n";
-            playerHand->deleteNode(tile);
-        std::cout << "4 TEST TEST TEST TEST\n";
+            playerHand->deletePosition(i);
             //  remove top of bag and add to player hand
             tile = bagTiles->getTile(0);
-        std::cout << "5 TEST TEST TEST TEST\n";
             playerHand->insertBack(tile);
-        std::cout << "6 TEST TEST TEST TEST\n";
             bagTiles->deleteFront();
-        std::cout << "7 TEST TEST TEST TEST\n";
             return true;
         }
     }
