@@ -143,16 +143,18 @@ bool GameEngine::placeTile(std::string* inputPtr){
     //get artive player hand as well as the bag
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
-    int points = 0;
-    int* pointsPtr = &points;
+    //int points = 0;
+    //UMCOMMENT THESE
+    //int* pointsPtr = &points;
     int tilePositionInHand = 0;
     bool isInHand = false;
     bool emptySpace = false;
     //CHANGE BACK TO FALSE WHEN DONE TESTING
-    bool legalMoveX = false;
-    bool legalMoveY = false;
-    char validColourSelect = '0';
-    int validShapeSelect = 0;
+    bool legalMoveX = true;
+    bool legalMoveY = true;
+    //UNCOMMENT THESE!
+    //char validColourSelect = '0';
+    //int validShapeSelect = 0;
     //this next bit of code is to get the actual int for the XCOORD
     char firstDigit = (*inputPtr)[PLACE_XCOORD1];
     char secondDigit = (*inputPtr)[PLACE_XCOORD2];
@@ -182,21 +184,22 @@ bool GameEngine::placeTile(std::string* inputPtr){
         if(colour==colourSelect && shape==shapeSelect){
             isInHand = true;
             tilePositionInHand = i;
-            validColourSelect = colourSelect;
-            validShapeSelect = shapeSelect;
+            //validColourSelect = colourSelect;
+            //validShapeSelect = shapeSelect;
         }
     }
     //check if board space is empty
     if((*boardPtr)[yCoord][xCoord]==nullptr){
         emptySpace = true;
     }
+    //UNCOMMENT THESE
     //check if board space is legal
-    if(this->boardXAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
-        legalMoveX = true;
-    }
-    if(this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
-        legalMoveY = true;
-    }
+    //if(this->boardXAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
+    //    legalMoveX = true;
+    //}
+    //if(this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
+    //    legalMoveY = true;
+    //}
 
 
     //if the move is completely LEGAL
