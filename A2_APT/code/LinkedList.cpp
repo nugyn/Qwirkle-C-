@@ -133,7 +133,7 @@ void LinkedList::deletePosition(int pos){
 	delete currNode;
 }
 
-Tile *LinkedList::getTile(Tile *tile) //Works
+Tile* LinkedList::getTile(Tile *tile) //Works
 {
 	Node *currNode = nullptr;
 	currNode = this->head;
