@@ -28,6 +28,9 @@ class GameEngine{
     Bag* bag;
     //board is going to be a 2d array of tilePtrs
     TilePtr*** boardPtr;
+    int* turnPtr;
+    bool noNeighboursOnX(int xCoord, int yCoord);
+    bool noNeighboursOnY(int xCoord, int yCoord);
     bool getValidFormatMove(std::string* inputPtr);
     bool replaceTile(std::string* inputPtr);
     bool placeTile(std::string* inputPtr);

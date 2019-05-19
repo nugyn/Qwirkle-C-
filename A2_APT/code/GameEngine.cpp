@@ -29,6 +29,7 @@ void GameEngine::newGame(){
     LinkedList* playerTwoHand = player2->getHand();
     //keeps track of the turns for player allocation
     int turn = 0;
+    turnPtr = &turn;
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr){
@@ -64,7 +65,7 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
     if(std::regex_match(toTest, replace)){
         //if the tile is able to be removed return true
         if(this->replaceTile(inputPtr)){
-            std::cout << "8 TEST TEST TEST TEST\n";
+         
             valid = true;
         }
     }
@@ -75,7 +76,7 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
             valid = true;
         }
     }      
-        std::cout << "9 TEST TEST TEST TEST\n";
+
         return valid;
 }
 
@@ -92,7 +93,7 @@ void GameEngine::playerMove(){
     while(!this->getValidFormatMove(inputPtr)){
         std::cout << "invalid move.\nTry again\n> ";
     }
-        std::cout << "10 TEST TEST TEST TEST\n";
+
 }
 
 //prints current board state
@@ -143,18 +144,17 @@ bool GameEngine::placeTile(std::string* inputPtr){
     //get artive player hand as well as the bag
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
-    //int points = 0;
-    //UMCOMMENT THESE
-    //int* pointsPtr = &points;
+    int points = 0;
+    int* pointsPtr = &points;
     int tilePositionInHand = 0;
     bool isInHand = false;
     bool emptySpace = false;
+    bool tileHasNeighbour = true;
     //CHANGE BACK TO FALSE WHEN DONE TESTING
-    bool legalMoveX = true;
-    bool legalMoveY = true;
-    //UNCOMMENT THESE!
-    //char validColourSelect = '0';
-    //int validShapeSelect = 0;
+    bool legalMoveX = false;
+    bool legalMoveY = false;
+    char validColourSelect = '0';
+    int validShapeSelect = 0;
     //this next bit of code is to get the actual int for the XCOORD
     char firstDigit = (*inputPtr)[PLACE_XCOORD1];
     char secondDigit = (*inputPtr)[PLACE_XCOORD2];
@@ -184,26 +184,38 @@ bool GameEngine::placeTile(std::string* inputPtr){
         if(colour==colourSelect && shape==shapeSelect){
             isInHand = true;
             tilePositionInHand = i;
-            //validColourSelect = colourSelect;
-            //validShapeSelect = shapeSelect;
+            validColourSelect = colourSelect;
+            validShapeSelect = shapeSelect;
         }
     }
     //check if board space is empty
     if((*boardPtr)[yCoord][xCoord]==nullptr){
         emptySpace = true;
     }
-    //UNCOMMENT THESE
-    //check if board space is legal
-    //if(this->boardXAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
-    //    legalMoveX = true;
-    //}
-    //if(this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
-    //    legalMoveY = true;
-    //}
+    //check if is not surrounded by anything and not turn 1
+    if(this->noNeighboursOnY(xCoord, yCoord) && this->noNeighboursOnX(xCoord, yCoord) && ((*turnPtr)!=0)){
+        tileHasNeighbour = false;
+    }
+    //check if board space is legal on both axis's that HAVE neighbours, if no neighbours it assumed legal (the above check accounts for if no neighbours)
 
-
+    if(!this->noNeighboursOnX(xCoord, yCoord)){
+        if(this->boardXAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
+            legalMoveX = true;
+        }
+    }
+    else{
+        legalMoveX = true;
+    }
+    if(!this->noNeighboursOnY(xCoord, yCoord)){           
+        if(this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
+            legalMoveY = true;
+        }
+    }
+    else{
+        legalMoveY = true;
+    }
     //if the move is completely LEGAL
-    if(isInHand && emptySpace && legalMoveX && legalMoveY){
+    if(isInHand && emptySpace && legalMoveX && legalMoveY && tileHasNeighbour){
         //get from player hand and place tile on the board
         Tile* tileToPlace = playerHand->getTile(tilePositionInHand);
         (*boardPtr)[yCoord][xCoord] = tileToPlace;
@@ -213,6 +225,11 @@ bool GameEngine::placeTile(std::string* inputPtr){
         tileToPlace = bagTiles->getTile(0);
         playerHand->insertBack(tileToPlace);
         bagTiles->deleteFront();
+        activePlayer->addPoints(points);
+        //lastly if this was the first turn of the game then the player needs to be given one point
+        if((*turnPtr)==0){
+            activePlayer->addPoints(1);
+        }
         return true;
 
     }
@@ -227,16 +244,17 @@ bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput,
     bool nullPtrFound = false;
     bool legalMove = false;
     int counter = 1;
-    int potentialPoints = 0;
+    int potentialPoints = 1;
     //inserts the slected tile into list
     Tile* tilePtr = new Tile(colour, shape);
-    xAxisMove->insertBack(tilePtr);
+    xAxisMove->insertFront(tilePtr);
     //iterate right from input until nullptr adding to the list as we go
     while(!nullPtrFound){
         //if the tiles to the right of the space are not nullptr AND within the grid
-        if(!((*boardPtr)[yInput][xInput+counter]==nullptr) && (xInput+counter <= MAX_MAP_LENGTH)){
+        if(!((*boardPtr)[yInput][xInput+counter]==nullptr) && (xInput+counter < MAX_MAP_LENGTH)){
             xAxisMove->insertBack((*boardPtr)[yInput][xInput+counter]);
             potentialPoints++;
+            counter++;
         }
         else{
             nullPtrFound = true;
@@ -249,12 +267,12 @@ bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput,
         if(!((*boardPtr)[yInput][xInput-counter]==nullptr) && (xInput-counter >= 0)){
             xAxisMove->insertBack((*boardPtr)[yInput][xInput-counter]);
             potentialPoints++;
+            counter++;
         }
         else{
             nullPtrFound = true;
         }
     }  
-
     legalMove = this->checkPlacementLegality(xAxisMove);
     //if it was a legal move update points
     if(legalMove){
@@ -272,32 +290,44 @@ bool GameEngine::boardYAxisLegal(char colour, int shape, int xInput, int yInput,
     bool nullPtrFound = false;
     bool legalMove = false;
     int counter = 1;
-    int potentialPoints = 0;
+    int potentialPoints = 1;
     //selected tile goes into list
     Tile* tilePtr = new Tile(colour, shape);
-    yAxisMove->insertBack(tilePtr);
+    yAxisMove->insertFront(tilePtr);
     //iterate down until a null ptr is found (adding as we go)
     while(!nullPtrFound){
-        //keep adding as long as there is a tile below that is within the grid
-        if(!((*boardPtr)[yInput+counter][xInput]==nullptr) && (yInput+counter <= MAX_MAP_LENGTH)){
-            yAxisMove->insertBack((*boardPtr)[yInput+counter][xInput]);
-            potentialPoints++;
-        }
-        else{
-            nullPtrFound = true;
+        if(yInput+counter < MAX_MAP_LENGTH){
+            //keep adding as long as there is a tile below that is within the grid
+            if(!((*boardPtr)[yInput+counter][xInput]==nullptr)){
+                yAxisMove->insertBack((*boardPtr)[yInput+counter][xInput]);
+                potentialPoints++;
+                counter++;
+            }
+            else{
+                nullPtrFound = true;
+            }
         }
     }
     nullPtrFound = false;
     counter = 1;
     while(!nullPtrFound){
-        if(!((*boardPtr)[yInput-counter][xInput]==nullptr) && (yInput-counter >= 0)){
-            yAxisMove->insertBack((*boardPtr)[yInput-counter][xInput]);
-            potentialPoints++;
+        //had to put this check before the other as it would cause seg faults (checks if we're going outside board)
+        if(yInput-counter >= 0){
+            //checks if there is an empty space
+            if(!((*boardPtr)[yInput-counter][xInput]==nullptr)){
+                yAxisMove->insertBack((*boardPtr)[yInput-counter][xInput]);
+                potentialPoints++;
+                counter++;
+            }
+            else{
+                nullPtrFound = true;
+            }
         }
         else{
             nullPtrFound = true;
         }
     }
+    yAxisMove->display();
     legalMove = this->checkPlacementLegality(yAxisMove);
     if(legalMove){
         *points+=potentialPoints;
@@ -314,19 +344,20 @@ bool GameEngine::checkPlacementLegality(LinkedList* listToTest){
     bool allOneShape = true;
     bool uniqueColours = true;
     bool uniqueShapes = true;
-    char testShape = listToTest->getTile(0)->getShape();
-    int testColour = listToTest->getTile(0)->getColour();
-    char allShapes[listToTest->size()+1] = {testShape}; 
-    int allColours[listToTest->size()+1] = {testColour};
-    
-    for(int i = 1; i < listToTest->size()+1; i++){
+    int testShape = listToTest->getTile(listToTest->size())->getShape();
+    char testColour = listToTest->getTile(listToTest->size())->getColour();
+    int allShapes[listToTest->size()] = {testShape}; 
+    char allColours[listToTest->size()] = {testColour};
+ 
+    //starts at 1 because we aregoing to be comparing all elements to the testColour which is based off pos 0
+    for(int i = 1; i < listToTest->size(); i++){
         //check if colours are all the same
-        if(!((listToTest->getTile(i)->getColour())==testColour)){
+        if((listToTest->getTile(i)->getColour())!=testColour){
             allOneColour = false;
 
         }
         //check if shapes are all the same
-        if((!listToTest->getTile(i)->getShape())==testShape){
+        if((listToTest->getTile(i)->getShape())!=testShape){
             allOneShape = false;
         }
         allShapes[i] = listToTest->getTile(i)->getShape();
@@ -334,31 +365,38 @@ bool GameEngine::checkPlacementLegality(LinkedList* listToTest){
     }
     //if all one colour then we need to confirm that all shapes are different
     if(allOneColour){
-        for(int i = 0; i < listToTest->size()+1; i++){
-            for(int j = i; j < listToTest->size()+1; j++){
-                if(allShapes[j]!=allShapes[i]){
+        for(int i = 0; i < listToTest->size(); i++){
+            for(int j = i+1; j < listToTest->size(); j++){
+                if(allShapes[j]==allShapes[i]){
                     uniqueShapes = false;
                 }
             }
         }
     }
     if(allOneShape){
-        for(int i = 0; i < listToTest->size()+1; i++){
-            for(int j = i; j < listToTest->size()+1; j++){
-                if(allColours[j]!=allColours[i]){
+        for(int i = 0; i < listToTest->size(); i++){
+            for(int j = i+1; j < listToTest->size(); j++){
+                if(allColours[j]==allColours[i]){
                     uniqueColours = false;
                 }
             }
         }
     }
 
+    bool validityCheck = false;
     //the final check, we need either unique colours AND all one shape OR all one colour AND unique shape
     if((allOneColour && uniqueShapes) || (allOneShape && uniqueColours)){
-        return true;
+        validityCheck = true;
     }
-    else{
-        return false;
+    if((allOneColour && allOneShape)){
+        validityCheck = false;
     }
+    //if its the first turn then all moves are legal
+    if(*turnPtr == 0){
+        validityCheck = true;
+    }
+
+    return validityCheck;
 
 }
 
@@ -391,4 +429,69 @@ bool GameEngine::replaceTile(std::string* inputPtr){
     //if no return false
     return false;       
 
+}
+
+//just to check if the tile is on its own, returns true if TILE HAS NO NEIGHBOURS
+//
+//CHANGE TO ONLY CHECK ONE AXIS SO THAT IF IT DOES HAVE A NEIGHBOUR THEN U DO LEGALITY
+bool GameEngine::noNeighboursOnX(int xCoord, int yCoord){
+
+    //set to true if orientation is empty
+    bool east = false;
+    bool west = false;
+    bool allTrue = false;
+
+    //if it is in bounds check (checks west)
+    if(xCoord-1 >= 0){
+        if((*boardPtr)[yCoord][xCoord - 1]==nullptr){
+            west = true;
+        }
+    }
+    //if out of bounds then we know its not taken
+    else{
+        west = true;
+    }
+    //checks east
+    if(xCoord+1 <= MAX_MAP_LENGTH){
+        if((*boardPtr)[yCoord][xCoord + 1]==nullptr){
+            east = true;
+        }
+    }
+    else{
+        east = true;
+    }
+    if(east && west){
+        allTrue = true;
+    }
+    return allTrue;
+}
+
+bool GameEngine::noNeighboursOnY(int xCoord, int yCoord){
+
+    bool north = false;
+    bool south = false;
+    bool allTrue = false;
+    //checks north
+    if(yCoord-1 >= 0){
+        if((*boardPtr)[yCoord-1][xCoord]==nullptr){
+            north = true;
+        }
+    }
+    else{
+        north = true;
+    }
+    //checks south
+    if(yCoord+1 <= MAX_MAP_LENGTH){
+        if((*boardPtr)[yCoord+1][xCoord]==nullptr){
+            south = true;
+        }
+    }
+    else{
+        south = true;
+    }
+
+    if(north && south){
+        allTrue = true;
+    }
+    return allTrue;
 }

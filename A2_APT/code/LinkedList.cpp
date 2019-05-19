@@ -38,16 +38,17 @@ void LinkedList::insertFront(Tile *tile) //Works
 void LinkedList::insertBack(Tile *tile) //Works
 {
 	Node *newNode = new Node(tile, nullptr);
+    newNode->setNext(nullptr);
 	Node *currNode = new Node(nullptr, nullptr);
-	Node *prevNode = new Node(nullptr, nullptr);
+	//Node *prevNode = new Node(nullptr, nullptr);
 	currNode = head;
 
 	while (currNode->getNext() != NULL)
 	{
-		prevNode = currNode;
+		//prevNode = currNode;
 		currNode = currNode->getNext();
 	}
-	prevNode->setNext(currNode);
+	//prevNode->setNext(currNode;
 	currNode->setNext(newNode);
 }
 
