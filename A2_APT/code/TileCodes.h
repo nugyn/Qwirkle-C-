@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TILECODES_H
+#define TILECODES_H
 
 // Colours
 #define RED    'R'
@@ -15,3 +16,8 @@
 #define SQUARE    4
 #define STAR_6    5
 #define CLOVER    6
+
+// TilePointer
+#define TilePtr Tile*
+
+#endif // TILECODES_H

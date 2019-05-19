@@ -47,8 +47,8 @@ void LinkedList::insertBack(Tile *tile) //Works
 		prevNode = currNode;
 		currNode = currNode->getNext();
 	}
-	prevNode->setNext(newNode);
-	newNode->setNext(currNode);
+	prevNode->setNext(currNode);
+	currNode->setNext(newNode);
 }
 
 void LinkedList::insertPosition(int pos, Tile *tile) //Works
@@ -134,7 +134,6 @@ void LinkedList::deletePosition(int pos){
 	delete currNode;
 }
 
-
 Tile* LinkedList::getTile(Tile *tile) //Works
 {
 	Node *currNode = nullptr;
@@ -176,6 +175,7 @@ void LinkedList::clear() //ERROR
 		delete toDelete;
 	}
 	tail = nullptr;
+    head = nullptr;
 	delete tail;
 }
 

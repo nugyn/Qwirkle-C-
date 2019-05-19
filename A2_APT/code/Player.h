@@ -1,3 +1,7 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
+#include "LinkedList.h"
 #include <string>
 #include <iostream>
 #include "LinkedList.h"
@@ -39,14 +43,8 @@ public:
     // Removes tile from hand
     void removeTile(Colour colour, Shape shape);
 
-    Player(string name, string studentID, string email, LinkedList* hand);
-    ~Player();
-
-private:
-
-    LinkedList *hand;
-    string name;
-    string studentID;
-    string email;
-
+  private:
+    Tile* findTile(Colour colour, Shape shape);
 };
+
+#endif // PLAYER_H
