@@ -35,20 +35,17 @@ void LinkedList::insertFront(Tile *tile) //Works
 	}
 }
 
-void LinkedList::insertBack(Tile *tile) //Works
+void LinkedList::insertBack(Tile* tile)
 {
-	Node *newNode = new Node(tile, nullptr);
-	Node *currNode = new Node(nullptr, nullptr);
-	Node *prevNode = new Node(nullptr, nullptr);
-	currNode = head;
+    Node* newNode = new Node(tile, nullptr);
+    Node* currNode = new Node(nullptr, nullptr);
+    currNode = head;
 
-	while (currNode->getNext() != NULL)
-	{
-		prevNode = currNode;
-		currNode = currNode->getNext();
-	}
-	prevNode->setNext(newNode);
-	newNode->setNext(currNode);
+    while (currNode->getNext()!=NULL)
+    {
+        currNode = currNode->getNext();
+    }
+    currNode->setNext(newNode);
 }
 
 void LinkedList::insertPosition(int pos, Tile *tile) //Works
