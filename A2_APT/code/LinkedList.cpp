@@ -74,7 +74,8 @@ void LinkedList::deleteFront() //Works
 	delete toDelete;
 }
 
-void LinkedList::deleteBack() //Works
+
+void LinkedList::deleteBack()	//Works
 {
 	Node *currNode = new Node(nullptr, nullptr);
 	Node *prevNode = new Node(nullptr, nullptr);
