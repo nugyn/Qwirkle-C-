@@ -16,6 +16,9 @@ public:
     int points;
     LinkedList* hand;
 
+    std::string *namePtr;
+    int* pointsPtr;
+
     Player(std::string name);
     Player(std::string name, LinkedList* hand);
     ~Player();
@@ -42,7 +45,7 @@ public:
     Tile* getTile(Colour color, Shape shape);
     // Removes tile from hand
     void removeTile(Colour colour, Shape shape);
-
+    
   private:
     Tile* findTile(Colour colour, Shape shape);
 };

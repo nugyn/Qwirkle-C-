@@ -17,7 +17,7 @@
 
         std::string board;
         std::string bag;
-        std::string currentPlayer;
+        std::string activePlayer;
     };
 
 class IOCode
@@ -26,8 +26,8 @@ public:
     IOCode();
     ~IOCode();
 
-    void writeFile(SaveGame s);
-    SaveGame readFile(std::string fileName);
+    void writeFile(SaveGame *s, std::string * fileName);
+    SaveGame *readFile(std::string fileName);
 
 
 };

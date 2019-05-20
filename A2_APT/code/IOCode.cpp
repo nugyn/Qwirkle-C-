@@ -1,50 +1,46 @@
 
 #include "IOCode.h"
 
-void writeFile(SaveGame s)
+IOCode::IOCode()
+{
+}
+
+IOCode::~IOCode()
+{
+}
+
+void IOCode::writeFile(SaveGame *s, std::string *fileName)
 {
 
     std::ofstream outputFile;
-    outputFile.open("savegame.txt");
+    std::string file = *fileName + ".txt";
+    outputFile.open(file);
 
-    outputFile << s.playerName1 << endl;
-    outputFile << s.playerScore1 << endl;
-    outputFile << s.playerHand1 << endl;
+    outputFile << s->playerName1 << std::endl;
+    outputFile << s->playerScore1 << std::endl;
+    outputFile << s->playerHand1 << std::endl;
 
-    outputFile << s.playerName2 << endl;
-    outputFile << s.playerScore2 << endl;
-    outputFile << s.playerHand2 << endl;
+    outputFile << s->playerName2 << std::endl;
+    outputFile << s->playerScore2 << std::endl;
+    outputFile << s->playerHand2 << std::endl;
 
-    outputFile << s.board << endl;
-    outputFile << s.bag << endl;
-    outputFile << s.currentPlayer << endl;
+    outputFile << s->board << std::endl;
+    outputFile << s->bag << std::endl;
+    outputFile << s->activePlayer << std::endl;
+
+    
 
     outputFile.close();
 }
 
-SaveGame readFile(std::string fileName)
+SaveGame *IOCode::readFile(std::string fileName)
 {
 
     std::string line;
     std::ifstream inFile;
-    inFile.open("savegame.txt");
+    inFile.open(fileName);
 
-    struct SaveGame
-    {
-        std::string playerName1;
-        int playerScore1;
-        std::string playerHand1;
-
-        std::string playerName2;
-        int playerScore2;
-        std::string playerHand2;
-
-        std::string board;
-        std::string bag;
-        std::string currentPlayer;
-    };
-
-    SaveGame sg;
+    SaveGame *sg = new SaveGame();
     std::string value = "";
     std::string board = "";
     int playerPos = 1;
@@ -59,12 +55,12 @@ SaveGame readFile(std::string fileName)
             std::string value = line;
             if (currentPlayer == 1)
             {
-                sg.playerName1 = value;
+                sg -> playerName1 = value;
                 ++playerPos;
             }
             else if (currentPlayer == 2)
             {
-                sg.playerName2 = value;
+                sg -> playerName2 = value;
                 ++playerPos;
             }
         }
@@ -77,7 +73,7 @@ SaveGame readFile(std::string fileName)
                 iss >> number;
                 if (!iss.good())
                 {
-                    sg.playerScore1 = number;
+                    sg -> playerScore1 = number;
                     ++playerPos;
                 }
             }
@@ -88,7 +84,7 @@ SaveGame readFile(std::string fileName)
                 iss >> number;
                 if (!iss.good())
                 {
-                    sg.playerScore1 = number;
+                    sg -> playerScore1 = number;
                     ++playerPos;
                 }
             }
@@ -99,13 +95,13 @@ SaveGame readFile(std::string fileName)
 
             if (currentPlayer == 1)
             {
-                sg.playerHand1 = value;
+                sg -> playerHand1 = value;
                 playerPos = 1;
                 ++currentPlayer;
             }
             else if (currentPlayer == 2)
             {
-                sg.playerHand2 = value;
+                sg -> playerHand2 = value;
                 playerPos = 1;
                 currentPlayer = 3;
                 value = "It's done";
@@ -120,39 +116,39 @@ SaveGame readFile(std::string fileName)
             }
             else if (boardPos == 8)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
 
                 --boardPos;
             }
             else if (boardPos == 7)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
 
                 --boardPos;
             }
             else if (boardPos == 6)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
                 --boardPos;
             }
             else if (boardPos == 5)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
                 --boardPos;
             }
             else if (boardPos == 4)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
                 --boardPos;
             }
             else if (boardPos == 3)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
                 --boardPos;
             }
             else if (boardPos == 2)
             {
-                sg.board += line + "\n";
+                sg -> board += line + "\n";
                 --boardPos;
             }
             else if (boardPos == 1)
@@ -165,12 +161,12 @@ SaveGame readFile(std::string fileName)
             {
                 if (other == 1)
                 {
-                    sg.bag = line;
+                    sg -> bag = line;
                     ++other;
                 }
                 else if (other == 2)
                 {
-                    sg.currentPlayer = line;
+                    sg -> activePlayer = line;
                     other = -1;
                 }
             }
@@ -178,11 +174,12 @@ SaveGame readFile(std::string fileName)
         boardFill = true;
     }
 
-    std::cout << sg.board << std::endl;
+    // std::cout << sg -> board << std::endl;
 
-    std::cout << sg.bag << std::endl;
+    // std::cout << sg -> bag << std::endl;
 
-    std::cout << sg.currentPlayer << std::endl;
+    // std::cout << sg -> activePlayer << std::endl;
+    
 
     return sg;
 }
