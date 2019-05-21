@@ -32,7 +32,7 @@ void GameEngine::newGame(){
     turnPtr = &turn;
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr){
+    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr && bag->getTiles()->getTile(0)!=nullptr){
 
         this->playerMove();
         turn++;
@@ -46,6 +46,8 @@ void GameEngine::newGame(){
         std::cout << "end of turn " << turn << "\n";
 
     }
+    //The winner is declared here
+    this->gameOver();
 
 
 }
@@ -93,6 +95,12 @@ void GameEngine::playerMove(){
     while(!this->getValidFormatMove(inputPtr)){
         std::cout << "invalid move.\nTry again\n> ";
     }
+
+}
+
+void GameEngine::gameOver(){
+
+
 
 }
 
@@ -219,6 +227,7 @@ bool GameEngine::placeTile(std::string* inputPtr){
         //get from player hand and place tile on the board
         Tile* tileToPlace = playerHand->getTile(tilePositionInHand);
         (*boardPtr)[yCoord][xCoord] = tileToPlace;
+        std::cout << "doesnt get to here\n";
         //remove from player hand
         playerHand->deletePosition(tilePositionInHand);
         //get a tile from the bag and place in player hand
@@ -274,6 +283,11 @@ bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput,
         }
     }  
     legalMove = this->checkPlacementLegality(xAxisMove);
+    //if the legnth of the move was six then QWIRKLE is given
+    if(xAxisMove->size()==6){
+        potentialPoints += QWIRKLE;
+        std::cout << "QWIRKLE!\n";
+    }
     //if it was a legal move update points
     if(legalMove){
         *points+=potentialPoints;
@@ -327,8 +341,13 @@ bool GameEngine::boardYAxisLegal(char colour, int shape, int xInput, int yInput,
             nullPtrFound = true;
         }
     }
-    yAxisMove->display();
     legalMove = this->checkPlacementLegality(yAxisMove);
+    //if the length was 6 then we give an additional 6 points for QWIRKLE
+    if(yAxisMove->size()==6){
+        potentialPoints += QWIRKLE;
+        std::cout << "QWIRKLE!\n";
+    }
+
     if(legalMove){
         *points+=potentialPoints;
     }
@@ -472,6 +491,7 @@ bool GameEngine::noNeighboursOnY(int xCoord, int yCoord){
     bool south = false;
     bool allTrue = false;
     //checks north
+    std::cout << yCoord << "\n";
     if(yCoord-1 >= 0){
         if((*boardPtr)[yCoord-1][xCoord]==nullptr){
             north = true;
@@ -481,7 +501,7 @@ bool GameEngine::noNeighboursOnY(int xCoord, int yCoord){
         north = true;
     }
     //checks south
-    if(yCoord+1 <= MAX_MAP_LENGTH){
+    if(yCoord+1 < MAX_MAP_LENGTH){
         if((*boardPtr)[yCoord+1][xCoord]==nullptr){
             south = true;
         }

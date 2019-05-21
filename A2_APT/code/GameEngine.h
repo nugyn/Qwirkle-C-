@@ -6,15 +6,16 @@
 #include "Player.h"
 #include "Bag.h"
 
-#define HANDSIZE 6
-#define REPLACE_COLOUR 8
-#define REPLACE_SHAPE 9
-#define PLACE_COLOUR 6
-#define PLACE_SHAPE 7
-#define PLACE_XCOORD1 13
-#define PLACE_XCOORD2 14
-#define PLACE_YCOORD 12
-#define MAX_MAP_LENGTH 26 
+#define HANDSIZE        6
+#define REPLACE_COLOUR  8
+#define REPLACE_SHAPE   9
+#define PLACE_COLOUR    6
+#define PLACE_SHAPE     7
+#define PLACE_XCOORD1   13
+#define PLACE_XCOORD2   14
+#define PLACE_YCOORD    12
+#define MAX_MAP_LENGTH  26 
+#define QWIRKLE         6
 
 class GameEngine{
 
@@ -29,6 +30,7 @@ class GameEngine{
     //board is going to be a 2d array of tilePtrs
     TilePtr*** boardPtr;
     int* turnPtr;
+    void gameOver();
     bool noNeighboursOnX(int xCoord, int yCoord);
     bool noNeighboursOnY(int xCoord, int yCoord);
     bool getValidFormatMove(std::string* inputPtr);
