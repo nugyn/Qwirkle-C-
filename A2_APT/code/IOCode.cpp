@@ -43,9 +43,10 @@ SaveGame *IOCode::readFile(std::string fileName)
     SaveGame *sg = new SaveGame();
     std::string value = "";
     std::string board = "";
+    int i = 29;
     int playerPos = 1;
     int currentPlayer = 1;
-    int boardPos = 9;
+    int boardPos = 29;
     int other = 0;
     bool boardFill = false;
     for (std::string line; getline(inFile, line);)
@@ -105,81 +106,50 @@ SaveGame *IOCode::readFile(std::string fileName)
                 playerPos = 1;
                 currentPlayer = 3;
                 value = "It's done";
+                boardFill = true;
             }
         }
         if (currentPlayer > 2 && boardFill == true) // allPlayers read, now read the board
         {
 
-            if (boardPos == 9)
+            if (boardPos == 29)
             {
                 --boardPos;
+                --i;
+
             }
-            else if (boardPos == 8)
+            else if (boardPos == i && boardPos != -1)
             {
                 sg -> board += line + "\n";
 
                 --boardPos;
+                --i;
             }
-            else if (boardPos == 7)
+            else if (boardPos == -1)
             {
-                sg -> board += line + "\n";
-
-                --boardPos;
-            }
-            else if (boardPos == 6)
-            {
-                sg -> board += line + "\n";
-                --boardPos;
-            }
-            else if (boardPos == 5)
-            {
-                sg -> board += line + "\n";
-                --boardPos;
-            }
-            else if (boardPos == 4)
-            {
-                sg -> board += line + "\n";
-                --boardPos;
-            }
-            else if (boardPos == 3)
-            {
-                sg -> board += line + "\n";
-                --boardPos;
-            }
-            else if (boardPos == 2)
-            {
-                sg -> board += line + "\n";
-                --boardPos;
-            }
-            else if (boardPos == 1)
-            {
-                boardPos = -1;
+                boardPos = -2;
+                boardFill = false;
                 ++other;
-            }
 
-            if (boardPos == -1)
+                i = -2;
+            }
+            if (boardPos == -2 && boardFill == false)
             {
                 if (other == 1)
                 {
+
                     sg -> bag = line;
                     ++other;
                 }
                 else if (other == 2)
                 {
+
                     sg -> activePlayer = line;
                     other = -1;
                 }
             }
         }
-        boardFill = true;
     }
-
-    // std::cout << sg -> board << std::endl;
-
-    // std::cout << sg -> bag << std::endl;
-
-    // std::cout << sg -> activePlayer << std::endl;
-    
 
     return sg;
 }

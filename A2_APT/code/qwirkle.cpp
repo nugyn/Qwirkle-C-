@@ -160,6 +160,7 @@ void newGame()
 void loadGame()
 {
     //TO DO
+    const std::regex txt_regex("[ROYGBP][1-9]");
 
     std::string fileName = "";
     std::cout << "Enter the filename you wish to load"
@@ -169,79 +170,75 @@ void loadGame()
     std::cin >> fileName;
 
     IOCode *fileLoader = new IOCode();
-    //4 std::cout << fileName << std::endl;
     SaveGame *loadGame = fileLoader->readFile(fileName + ".txt");
 
-    std::string name = loadGame->playerName1;
-    std::cout << name << std::endl;
     //TODO Build the hands of players (LinkedList)
     LinkedList *hand1 = new LinkedList();
     LinkedList *hand2 = new LinkedList();
+    Bag *bagPtr = new Bag();
+    //TODO Build the bag (LinkedList)
+    LinkedList *bagLList = new LinkedList();
+    // bagPtr->bagLinkedList = *bagLList;
 
-    //begin parsing Hand string
+    //begin parsing objects of the game
+    std::string name = loadGame->playerName1;
     std::string hand1String = loadGame->playerHand1;
     std::string hand2String = loadGame->playerHand2;
-    std::cout << hand1String << std::endl;
+    std::string bagStr = loadGame->bag;
+    std::string boardStr = loadGame->board;
+
     std::string delimiter = ", ";
-    std::cout << "what the fuck" << std::endl;
+
+    //handString parsing into char and int, and fill hands.
     size_t pos = 0;
     std::string token;
     std::string colour;
     std::string shape;
-
     while ((pos = hand1String.find(delimiter)) != std::string::npos)
     {
-        std::cout << "legoo" << std::endl;
         token = hand1String.substr(0, pos);
-        std::cout << token << std::endl;
         colour = token[0];
         shape = token[1];
         int shapeInt = stoi(shape);
         const char *colourChar = colour.c_str();
         Tile *newTile = new Tile(*colourChar, shapeInt);
-       
+
         hand1->insertFront(newTile);
         hand1String.erase(0, pos + delimiter.length());
-        
     }
-    std::cout << "what the fuck 2" << std::endl;
 
     while ((pos = hand2String.find(delimiter)) != std::string::npos)
     {
-        std::cout << "Loooping" << std::endl;
-
         token = hand2String.substr(0, pos);
         colour = token[0];
         shape = token[1];
         int shapeInt = stoi(shape);
         const char *colourChar = colour.c_str();
         Tile *newTile = new Tile(*colourChar, shapeInt);
-        std::cout << newTile->toString() << std::endl;
-         
 
         hand2->insertFront(newTile);
         hand2String.erase(0, pos + delimiter.length());
-        delete newTile;
     }
+    while ((pos = bagStr.find(delimiter)) != std::string::npos)
+    {
+        token = bagStr.substr(0, pos);
+        colour = token[0];
+        shape = token[1];
+        int shapeInt = stoi(shape);
+        const char *colourChar = colour.c_str();
+        Tile *newTile = new Tile(*colourChar, shapeInt);
 
-    
-
-    std::cout << "what the fuck 3" << std::endl;
-
-    //TODO Build the bag (LinkedList)
-    LinkedList *bagLList = new LinkedList();
+        bagLList->insertFront(newTile);
+        bagStr.erase(0, pos + delimiter.length());
+    }
     //TODO Fill Board (2D Array)
     Player **players = new Player *[NUMBER_OF_PLAYERS];
     Player *player1 = new Player(loadGame->playerName1, hand1);
     Player *player2 = new Player(loadGame->playerName2, hand2);
-    std::cout << "what the fuck 4" << std::endl;
+    bagPtr->bagLinkedList = *bagLList;
 
     players[1] = player1;
     players[2] = player2;
-    Bag *bagPtr = new Bag();
-
-    bagPtr->bagLinkedList = *bagLList;
-    std::cout << "what the fuck 5" << std::endl;
 
     TilePtr **board = new TilePtr *[MAX_LENGTH];
     for (int i = 0; i < MAX_LENGTH; ++i)
@@ -256,11 +253,61 @@ void loadGame()
         }
     }
 
+    std::string copyBoardString = boardStr;
+    std::string boardDelimiter = "\n";
+    std::string tokenDelimiter = "|";
+    int x = 0;
+    int y = 0;
+
+    int i = 0;
+    size_t btPos = 0;
+    while ((btPos = copyBoardString.find(boardDelimiter)) != std::string::npos)
+    {
+        // std::cout << "Here" << std::endl;
+        if (i >= 2)
+        {
+            x = 0;
+            //Grab the first row of the entire board string.
+            std::string bRowToken = copyBoardString.substr(0, btPos);
+             std::cout << bRowToken << "[*]" << std::endl;
+            size_t tokenPos = 0;
+            while ((tokenPos = bRowToken.find(tokenDelimiter)) != std::string::npos)
+            {
+                // std::cout << "X" << x << std::endl;
+                std::string bCellToken = bRowToken.substr(0, tokenPos);
+                                std::cout << bCellToken << "[!!]" << std::endl;
+
+                if (std::regex_match(bCellToken, txt_regex)){
+                    //Split the row into cells, make tiles, fill board array.
+                    colour = bCellToken[0];
+                shape = bCellToken[1];
+                int shapeInt = stoi(shape);
+                const char *colourChar = colour.c_str();
+                std::cout << "[+]" << x << " " << y << std::endl;
+                Tile *boardTile = new Tile(*colourChar, shapeInt);
+                board[y][x] = boardTile;
+                std::cout << "DOES something"<< x << y<< std::endl;
+                bRowToken.erase(0, tokenPos + delimiter.length());
+                // std::cout << bRowToken << "[!!]" << std::endl;
+                }
+                else
+                {
+                    bRowToken.erase(0, tokenPos + delimiter.length() - 1);
+                    // std::cout << bRowToken << "[!!!]" << std::endl;
+                }
+                ++x;
+            }
+
+            ++y;
+        }
+        // std::cout << copyBoardString << std::endl;
+        copyBoardString.erase(0, btPos + delimiter.length());
+        i++;
+    }
+    
     GameEngine *gameEnginePtr = new GameEngine(player1, player2, boardPtr, bagPtr);
-    std::cout << "what the fuck 6" << std::endl;
 
     gameEnginePtr->newGame();
-    std::cout << "what the fuck 7" << std::endl;
 
     delete gameEnginePtr;
     delete[] board;

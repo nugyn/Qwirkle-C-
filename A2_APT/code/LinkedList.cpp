@@ -51,7 +51,7 @@ void LinkedList::insertFront(Tile *tile) //Works
 	}
 }
 
-void LinkedList::insertPosition(int pos, Tile *tile) //Segfaulting
+void LinkedList::insertPosition(int pos, Tile *tile) //work
 {
 	Node *newNode = new Node(tile, nullptr);
 	Node *currNode = new Node(nullptr, nullptr);

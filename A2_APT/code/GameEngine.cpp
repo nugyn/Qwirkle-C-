@@ -22,23 +22,18 @@ void GameEngine::newGame()
 {
 
     activePlayer = player1;
-    std::cout << "got here" << std::endl;
     //while no players hand is empty keep getting turns
     LinkedList *playerOneHand = player1->getHand();
     LinkedList *playerTwoHand = player2->getHand();
-        std::cout << "got here 1" << std::endl;
 
     //keeps track of the turns for player allocation
     int turn = 0;
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "got here 1" << std::endl;
     std::string playerHand = playerOneHand -> getTile(0) -> toString();
     std::cout << playerHand << std::endl;
     while (playerOneHand->getTile(0) != nullptr && playerTwoHand->getTile(0) != nullptr)
     {
-        std::cout << "got here 2" << std::endl;
-
         this->playerMove();
         turn++;
         if (turn % 2 == 0)
@@ -148,6 +143,7 @@ SaveGame * GameEngine::convertToSaveGame()
     boardString += "   ------------------------------------------------------------------------------";
     //primitive data types ;)
     char letters = 'A';
+    std::string stringLetter(1, letters);
     for (int i = 0; i < MAX_MAP_LENGTH; i++)
     {
             std::string stringLetter(1, letters);
@@ -344,10 +340,19 @@ bool GameEngine::placeTile(std::string *inputPtr)
         Tile *tileToPlace = playerHand->getTile(tilePositionInHand);
         (*boardPtr)[yCoord][xCoord] = tileToPlace;
         //remove from player hand
+                        std::cout << "it is here1" << std::endl;
+
         playerHand->deletePosition(tilePositionInHand);
+                        std::cout << "it is here2" << std::endl;
+
         //get a tile from the bag and place in player hand
+                                std::cout << "it is here3" << std::endl;
+                                bagTiles -> display();
         tileToPlace = bagTiles->getTile(0);
+                std::cout << "wOOOOOOP" << std::endl;
+
         playerHand->insertBack(tileToPlace);
+        std::cout << "it is here" << std::endl;
         bagTiles->deleteFront();
         return true;
     }
@@ -371,18 +376,15 @@ bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput,
     //iterate right from input until nullptr adding to the list as we go
     while (!nullPtrFound)
     {
-        std::cout << "Is runnining the shit" << std::endl;
         //if the tiles to the right of the space are not nullptr AND within the grid
         if (!((*boardPtr)[yInput][xInput + counter] == nullptr) && (xInput + counter <= MAX_MAP_LENGTH))
         {
             xAxisMove->insertBack((*boardPtr)[yInput][xInput + counter]);
             potentialPoints++;
-            std::cout << "Is runnining the shit1 " << std::endl;
         }
         else
         {
             nullPtrFound = true;
-            std::cout << "Is runnining the shit2" << std::endl;
         }
     }
     nullPtrFound = false;
