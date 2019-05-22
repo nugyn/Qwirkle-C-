@@ -5,6 +5,10 @@
 
 //this regex makes sure that we are getting the right format for the "place..." and "replace..."
 
+std::regex place("(place )[ROYGBP][1-6]( at )[A-Z](2[0-5]|1[0-9]|0?[0-9])");
+std::regex replace("(replace )[ROYGBP][1-6]");
+
+
 GameEngine::GameEngine(Player *playerOne, Player *playerTwo, TilePtr ***boardPtr, Bag *bagPtr)
 {
 
