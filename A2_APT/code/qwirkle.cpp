@@ -22,10 +22,15 @@ void quit();
 
 bool exitProgram = false;
 
-int main(void)
-{
-    // LinkedList* list = new LinkedList();
-    // delete list;
+int main(void) {
+  // LinkedList* list = new LinkedList();
+  // delete list;
+   
+   std::cout << "Welcome to Qwirkle!" << std::endl << std::endl;
+   while(!exitProgram && !std::cin.eof()){
+       mainMenu();
+   }
+   std::cout << "Goodbye!\n";
 
     std::cout << "Welcome to Qwirkle!" << std::endl
               << std::endl;
@@ -37,31 +42,32 @@ int main(void)
     return EXIT_SUCCESS;
 }
 
-void mainMenu()
-{
+void mainMenu(){
 
-    printMenu();
+   printMenu();
 
-    //use this bool to determine if the user has input a valid option
-    bool validInput = false;
-    char input = '0';
-    //while the user hasnt input a valid option
+   //use this bool to determine if the user has input a valid option
+   bool validInput = false;
+   char input = '0';
+   //while the user hasnt input a valid option
 
-    while (!validInput)
-    {
-        std::cout << "> ";
-        std::cin >> input;
-        if (input == '1' || input == '2' || input == '3' || input == '4')
-        {
-            validInput = true;
-            std::cout << std::endl;
-            menuSelect(input);
-        }
-        else
-        {
-            std::cout << "Invalid Input" << std::endl;
-        }
-    }
+   while(!validInput){
+       std::cout << "> ";
+       std::cin >> input;
+       if(input == '1' || input == '2' || input == '3' || input == '4' || std::cin.eof()){
+           validInput = true;
+           std::cout << std::endl;
+           if(std::cin.eof()){
+               menuSelect(4);
+           }
+           else{
+           menuSelect(input);
+           }
+       }
+       else{
+           std::cout << "Invalid Input" << std::endl;
+       }
+   }
 }
 
 void printMenu()
@@ -106,11 +112,9 @@ void newGame()
     bagPtr->fillBag();
 
     //Make the players and give them their hands
-    for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
-    {
-        std::cout << "Enter a name for player " << i + 1 << "\n";
-        while (!validName)
-        {
+    for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
+        while(!validName && !std::cin.eof()){
+            std::cout << "Enter a name for player " << i + 1 << "\n";
             std::cout << ">";
             std::cin >> playerNames[i];
             if (std::regex_match(playerNames[i], nameFormat))
@@ -128,33 +132,38 @@ void newGame()
                 }
                 players[i] = new Player(playerNames[i], hand);
             }
-            else
-            {
-                std::cout << "Only letters allowed \n";
+            else{
+                if(!std::cin.eof()){
+                    std::cout << "Only letters allowed \n";
+                    //exits the for loop
+                    i = NUMBER_OF_PLAYERS;
+                }
+
             }
         }
         validName = false;
     }
-    std::cout << "\n";
-    std::cout << "Let's Play\n";
-    TilePtr **board = new TilePtr *[MAX_LENGTH];
-    for (int i = 0; i < MAX_LENGTH; ++i)
-        board[i] = new TilePtr[MAX_WIDTH];
-    TilePtr ***boardPtr = &board;
-    //changes ALL values to nullptr
-    for (int i = 0; i < MAX_WIDTH; i++)
-    {
-        for (int j = 0; j < MAX_LENGTH; j++)
-        {
-            board[i][j] = nullptr;
+    //if not eof then we play the game
+    if(!std::cin.eof()){
+        std::cout << "\n";
+        std::cout << "Let's Play\n";
+        TilePtr** board = new TilePtr*[MAX_LENGTH];
+        for(int i = 0; i < MAX_LENGTH; ++i)
+            board[i] = new TilePtr[MAX_WIDTH];
+        TilePtr*** boardPtr = &board;
+        //changes ALL values to nullptr
+        for(int i = 0; i < MAX_WIDTH; i++){
+            for(int j = 0; j < MAX_LENGTH; j++){
+                board[i][j] = nullptr;
+            }
         }
-    }
-    //make the whole board nullptr
-    GameEngine *gameEnginePtr = new GameEngine(players[0], players[1], boardPtr, bagPtr);
-    gameEnginePtr->newGame();
-    delete gameEnginePtr;
-    //loop through to delete?
-    delete[] board;
+        //make the whole board nullptr
+        GameEngine* gameEnginePtr = new GameEngine(players[0], players[1] , boardPtr, bagPtr);
+        gameEnginePtr->newGame();
+        delete gameEnginePtr;
+        //loop through to delete?
+        delete[] board;
+    } 
 }
 
 void loadGame()
@@ -332,10 +341,7 @@ void showInfo()
     std::cout << "--------------------------------\n\n";
 }
 
-void quit()
-{
-    //TO DO
-    std::cout << "smell ya later"
-              << "\n";
+void quit(){
+
     exitProgram = true;
 }
