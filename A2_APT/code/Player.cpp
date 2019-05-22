@@ -14,8 +14,6 @@ Player::Player(std::string name, LinkedList* hand)
 
 Player::~Player()
 {
-  delete namePtr;
-  delete pointsPtr;
 }
 
 void Player::setHand(LinkedList* hand)
@@ -40,13 +38,13 @@ LinkedList* Player::getHand()
 
 int* Player::getPoints()
 {
-  pointsPtr = &points;
+  int *pointsPtr = &points;
   return pointsPtr;
 }
 
 string* Player::getName()
 {
-  namePtr = &name;
+  string *namePtr = &name;
   return namePtr;
 }
 

@@ -30,18 +30,3 @@ void Tile::setColour(Colour colourVal)
 {
 	this->colour = colourVal;
 }
-
-std::string Tile::toString()
-{
-	char a = this -> getColour();
-	int b = this -> getShape();
-
-
-	std::stringstream sstm;
-	sstm << a << b;
-
-	std::string ans = sstm.str();
-	
-	return ans;
-	
-}

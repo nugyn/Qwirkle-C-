@@ -3,11 +3,6 @@
 
 #include "LinkedList.h"
 #include <string>
-#include <iostream>
-#include "LinkedList.h"
-
-
-using namespace std;
 
 class Player{
 
@@ -15,9 +10,6 @@ public:
     std::string name;
     int points;
     LinkedList* hand;
-
-    std::string *namePtr;
-    int* pointsPtr;
 
     Player(std::string name);
     Player(std::string name, LinkedList* hand);
@@ -45,7 +37,7 @@ public:
     Tile* getTile(Colour color, Shape shape);
     // Removes tile from hand
     void removeTile(Colour colour, Shape shape);
-    
+
   private:
     Tile* findTile(Colour colour, Shape shape);
 };

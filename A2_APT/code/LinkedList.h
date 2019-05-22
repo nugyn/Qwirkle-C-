@@ -2,7 +2,6 @@
 #define LINKEDLIST_H
 
 #include "Node.h"
-#include <string>
 
 class LinkedList
 {
@@ -27,14 +26,11 @@ public:
 	int size();
 	void display();
 
-	std::string toString();
-
 
 
 private:
 	Node* head;
 	Node* tail;
-	std::string stringList;
 };
 
 #endif // LINKEDLIST_H

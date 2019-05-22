@@ -10,5 +10,3 @@ qwirkle: Tile.o Node.o LinkedList.o qwirkle.o
 
 %.o: %.cpp
 	g++ -Wall -Werror -std=c++14 -g -O -c $^
-
-▶ g++ -Wall -Werror -std=c++14 -g -O -o qwirkle *.cpp  
