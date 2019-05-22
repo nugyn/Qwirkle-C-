@@ -1,6 +1,7 @@
 #include "Bag.h"
 #include <time.h>
 #include <stdlib.h>  
+#include <string>
 
 void Bag::fillBag()
 {
@@ -66,4 +67,10 @@ LinkedList* Bag::getTiles(){
     tilesPtr = &bagLinkedList;
     return tilesPtr;
     
+}
+
+std::string Bag::toString(){
+	LinkedList *bagList = &(bagLinkedList);
+	std::string bagString = bagList -> toString();
+	return bagString;
 }
