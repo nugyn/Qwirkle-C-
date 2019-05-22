@@ -8,7 +8,6 @@
 std::regex place("(place )[ROYGBP][1-6]( at )[A-Z](2[0-5]|1[0-9]|0?[0-9])");
 std::regex replace("(replace )[ROYGBP][1-6]");
 
-
 GameEngine::GameEngine(Player *playerOne, Player *playerTwo, TilePtr ***boardPtr, Bag *bagPtr)
 {
 
@@ -35,8 +34,8 @@ void GameEngine::newGame()
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     //while neither players hand is empty (the players hands will never be empty whilst the bag still has tiles)
-    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr && !std::cin.eof()){
-
+    while (playerOneHand->getTile(0) != nullptr && playerTwoHand->getTile(0) != nullptr && !std::cin.eof())
+    {
 
         this->playerMove();
         turn++;
@@ -48,15 +47,15 @@ void GameEngine::newGame()
         {
             activePlayer = player2;
         }
-        if(!std::cin.eof()){
+        if (!std::cin.eof())
+        {
             std::cout << "end of turn " << turn << "\n";
         }
-
     }
     //The winner is declared here
-    if(!std::cin.eof()){
+    if (!std::cin.eof())
+    {
         this->gameOver();
-
     }
 }
 //gets input and checks it is either "place <tile> at XY" OR "replace <tile>"
@@ -65,16 +64,17 @@ bool GameEngine::getValidFormatMove(std::string *inputPtr)
 
     //clears the cin stream
     bool valid = false;
-    
+
     //now gets the input from the user and puts it into both inputPtr AND the toTest string
     std::getline(std::cin, *inputPtr);
     std::string toTest = *inputPtr;
 
-
-    if(std::cin.eof()){
+    if (std::cin.eof())
+    {
         valid = true;
     }
-    
+    std::regex place("(place )[ROYGBP][1-6]( at )[A-Z](2[0-5]|1[0-9]|0?[0-9])");
+    std::regex replace("(replace )[ROYGBP][1-6]");
     std::regex save("(save)");
 
     //if one of the regexs PASS then we allow to continue
@@ -91,18 +91,20 @@ bool GameEngine::getValidFormatMove(std::string *inputPtr)
     if (std::regex_match(toTest, place))
     {
         //if tile canno be placed
+        std::cout << *inputPtr << std::endl;
         if (this->placeTile(inputPtr))
         {
             valid = true;
+            std::cout << "9 TRUE\n";
         }
     }
     std::cout << "9 TEST TEST TEST TEST\n";
     if (std::regex_match(toTest, save))
     {
-        
+
         this->saveGame(inputPtr);
         valid = true;
-    std::cout << "fuck" << std::endl;
+        std::cout << "fuck" << std::endl;
     }
     return valid;
 }
@@ -125,26 +127,21 @@ void GameEngine::playerMove()
     std::cout << "10 TEST TEST TEST TEST\n";
 }
 
-void GameEngine::saveGame(std::string * inputFileName)
+void GameEngine::saveGame(std::string *inputFileName)
 {
     IOCode *fileSaver = new IOCode();
-    std::cout << "fuck1" << std::endl;
-    SaveGame *saveGame = this -> convertToSaveGame();
-        std::cout << "fuck2" << std::endl;
+    SaveGame *saveGame = this->convertToSaveGame();
 
     fileSaver->writeFile(saveGame, inputFileName);
-        std::cout << "fuck3" << std::endl;
-
 }
 
-SaveGame * GameEngine::convertToSaveGame()
+SaveGame *GameEngine::convertToSaveGame()
 {
     SaveGame *saveGame = new SaveGame();
 
-    
     std::string *name1 = player1->getName();
     std::string *name2 = player2->getName();
-    int *score1 = player1->getPoints(); 
+    int *score1 = player1->getPoints();
     int *score2 = player2->getPoints();
 
     LinkedList *hand1 = player1->getHand();
@@ -162,10 +159,10 @@ SaveGame * GameEngine::convertToSaveGame()
     std::string stringLetter(1, letters);
     for (int i = 0; i < MAX_MAP_LENGTH; i++)
     {
-            std::string stringLetter(1, letters);
+        std::string stringLetter(1, letters);
 
         boardString += "\n" + stringLetter + " |";
-        
+
         for (int j = 0; j < MAX_MAP_LENGTH; j++)
         {
             if ((*boardPtr)[i][j] == nullptr)
@@ -175,7 +172,7 @@ SaveGame * GameEngine::convertToSaveGame()
             else
             {
                 std::string tile = (*boardPtr)[i][j]->toString();
-               
+
                 boardString += tile + '|';
             }
         }
@@ -186,47 +183,49 @@ SaveGame * GameEngine::convertToSaveGame()
     std::string *activePlayerString = activePlayer->getName();
     std::cout << "fuck covertSaveGame 2" << std::endl;
 
-    saveGame ->playerName1 = *name1;
-            std::cout << *name1 << std::endl;
-            std::cout << "WAAAH"<< std::endl;
-
-    saveGame -> playerHand1 = hand1String;
+    saveGame->playerName1 = *name1;
     std::cout << *name1 << std::endl;
-            std::cout << "fuck covertSaveGame 3.2" << std::endl;
+    std::cout << "WAAAH" << std::endl;
 
-    saveGame -> playerScore1 = *score1;
-        std::cout << "fuck covertSaveGame 3.3" << std::endl;
+    saveGame->playerHand1 = hand1String;
+    std::cout << *name1 << std::endl;
+    std::cout << "fuck covertSaveGame 3.2" << std::endl;
 
-    saveGame -> playerName2 = *name2;
-    saveGame -> playerHand2 = hand2String;
-    saveGame -> playerScore2 = *score2;
-        std::cout << "fuck covertSaveGame 4" << std::endl;
+    saveGame->playerScore1 = *score1;
+    std::cout << "fuck covertSaveGame 3.3" << std::endl;
 
-    saveGame -> bag = bagString;
-    saveGame -> board = boardString;
-    saveGame -> activePlayer = *activePlayerString;
+    saveGame->playerName2 = *name2;
+    saveGame->playerHand2 = hand2String;
+    saveGame->playerScore2 = *score2;
+    std::cout << "fuck covertSaveGame 4" << std::endl;
 
-        std::cout << "fuck covertSaveGame 5" << std::endl;
+    saveGame->bag = bagString;
+    saveGame->board = boardString;
+    saveGame->activePlayer = *activePlayerString;
 
+    std::cout << "fuck covertSaveGame 5" << std::endl;
 
     return saveGame;
 }
 
-void GameEngine::gameOver(){
+void GameEngine::gameOver()
+{
 
     std::cout << "Game over\n";
     std::cout << "Score for " << player1->getName() << " : " << *(player1->getPoints()) << "\n";
     std::cout << "Score for " << player2->getName() << " : " << *(player2->getPoints()) << "\n";
-    if(*(player1->getPoints()) > *(player2->getPoints())){
+    if (*(player1->getPoints()) > *(player2->getPoints()))
+    {
         std::cout << "Player " << player1->getName() << " won!\n";
     }
-    else if(*(player2->getPoints()) > *(player1->getPoints())){
+    else if (*(player2->getPoints()) > *(player1->getPoints()))
+    {
         std::cout << "Player " << player2->getName() << " won!\n";
     }
-    else{
+    else
+    {
         std::cout << "Tie game, you both win! :)";
     }
-
 }
 
 //prints current board state
@@ -270,10 +269,12 @@ void GameEngine::printGameStatus()
     this->printBoard();
     int handSize = activePlayer->getHand()->size();
     std::cout << "\nYour hand is\n";
-    for(int i = 1; i <= handSize; i++){
-        Tile* handTile = activePlayer->getHand()->getTile(i);
+    for (int i = 1; i <= handSize; i++)
+    {
+        Tile *handTile = activePlayer->getHand()->getTile(i);
         std::cout << handTile->getColour() << handTile->getShape();
-        if(i!=handSize){
+        if (i != handSize)
+        {
             std::cout << ",";
         }
     }
@@ -283,11 +284,11 @@ void GameEngine::printGameStatus()
 //for when the player wishes to place a tile returns false if there is a problem
 bool GameEngine::placeTile(std::string *inputPtr)
 {
-
+    std::cout << *inputPtr << std::endl;
     //get artive player hand as well as the bag
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
-    int points = 0;
+    int points = 1;
     //UMCOMMENT THESE
     int *pointsPtr = &points;
     int tilePositionInHand = 0;
@@ -322,25 +323,39 @@ bool GameEngine::placeTile(std::string *inputPtr)
     //minusing 'A' should give us the correct coordinate 'C' - 'A' = 2 as an int, which is the correct coord
     int yCoord = (*inputPtr)[PLACE_YCOORD] - 'A';
     //check if tile is in the hand
-    for(int i = 1; i <= playerHand->size(); i++){
-        char colour = playerHand->getTile(i)->getColour();
-        std::cout << "[*}" << std::endl;
-        int shape = playerHand->getTile(i)->getShape();
-        std::cout << "[**}" << std::endl;
-        char colourSelect = (*inputPtr)[PLACE_COLOUR];
-        std::cout << "[***}" << std::endl;
-        //the - '0' is to convert the char to the int
-        int shapeSelect = (*inputPtr)[PLACE_SHAPE] - '0';
-        std::cout << "[****}" << std::endl;
-        //to check for bool
-        if (colour == colourSelect && shape == shapeSelect)
+    bool keepGoing = true;
+
+    for (int i = 1; i <= HANDSIZE; i++)
+    {
+        if (keepGoing == true)
         {
-            std::cout << "[*****}" << std::endl;
-            isInHand = true;
-            tilePositionInHand = i;
-            validColourSelect = colourSelect;
-            validShapeSelect = shapeSelect;
-            std::cout << " 4 [+]" << std::endl;
+            std::cout << " 3 [+]" << std::endl;
+            std::cout << "HANDSIZE= " << HANDSIZE << std::endl;
+            std::cout << "Interation" << i << std::endl;
+
+            char colour = playerHand->getTile(i)->getColour();
+            std::cout << "[*}" << std::endl;
+            int shape = playerHand->getTile(i)->getShape();
+            std::cout << "[**}" << shape << std::endl;
+            std::cout << "In Hand" << colour << shape << std::endl;
+
+            char colourSelect = (*inputPtr)[PLACE_COLOUR];
+            std::cout << "[***}" << std::endl;
+            //the - '0' is to convert the char to the int
+            int shapeSelect = (*inputPtr)[PLACE_SHAPE] - '0';
+            std::cout << shapeSelect << std::endl;
+            std::cout << "[****}" << std::endl;
+            //to check for bool
+            if (colour == colourSelect && shape == shapeSelect)
+            {
+                std::cout << "[*****}" << std::endl;
+                isInHand = true;
+                tilePositionInHand = i;
+                validColourSelect = colourSelect;
+                validShapeSelect = shapeSelect;
+                keepGoing = false;
+                std::cout << " 4 [+]" << std::endl;
+            }
         }
     }
     //check if board space is empty
@@ -353,38 +368,32 @@ bool GameEngine::placeTile(std::string *inputPtr)
     //check if board space is legal
     if (this->boardXAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr))
     {
-        std::cout << " [***}" << std::endl;
         legalMoveX = true;
     }
     if (this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr))
     {
-        std::cout << "[****}" << std::endl;
         legalMoveY = true;
     }
 
     //if the move is completely LEGAL
+    std::cout << "This is the conditions, for below: " << isInHand << emptySpace << legalMoveX << legalMoveY << std::endl;
     if (isInHand && emptySpace && legalMoveX && legalMoveY)
     {
-        std::cout << "[E}" << std::endl;
 
         //get from player hand and place tile on the board
         Tile *tileToPlace = playerHand->getTile(tilePositionInHand);
         (*boardPtr)[yCoord][xCoord] = tileToPlace;
         //remove from player hand
-                        std::cout << "it is here1" << std::endl;
 
         playerHand->deletePosition(tilePositionInHand);
-        //get a tile from the bag and place in player hand (if bag has tiles)
-        if(bagTiles->getTile(0)!=nullptr){
-            tileToPlace = bagTiles->getTile(0);
-            playerHand->insertBack(tileToPlace);
-            bagTiles->deleteFront();
-        }
+
+        //get a tile from the bag and place in player hand
+        tileToPlace = bagTiles->getTile(0);
+
+        playerHand->insertBack(tileToPlace);
+        bagTiles->deleteFront();
+
         activePlayer->addPoints(points);
-        //lastly if this was the first turn of the game then the player needs to be given one point
-        if((*turnPtr)==0){
-            activePlayer->addPoints(1);
-        } 
         return true;
     }
     //if not legal then return false;
@@ -393,60 +402,53 @@ bool GameEngine::placeTile(std::string *inputPtr)
 // checks the legality along the X Axis
 bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput, int *points)
 {
-    std::cout << "runs Board X" << std::endl;
+
     LinkedList *xAxisMove = new LinkedList();
     bool nullPtrFound = false;
     bool legalMove = false;
     int counter = 1;
-    int potentialPoints = 0;
+    int potentialPoints = 1;
     //inserts the slected tile into list
     Tile *tilePtr = new Tile(colour, shape);
-    xAxisMove->insertBack(tilePtr);
-    std::cout << "runs xAxisMove  -> insertBack" << std::endl;
-
+    xAxisMove->insertFront(tilePtr);
     //iterate right from input until nullptr adding to the list as we go
     while (!nullPtrFound)
     {
         //if the tiles to the right of the space are not nullptr AND within the grid
-        if (!((*boardPtr)[yInput][xInput + counter] == nullptr) && (xInput + counter <= MAX_MAP_LENGTH))
+        if (!((*boardPtr)[yInput][xInput + counter] == nullptr) && (xInput + counter < MAX_MAP_LENGTH))
         {
             xAxisMove->insertBack((*boardPtr)[yInput][xInput + counter]);
             potentialPoints++;
+            counter++;
         }
         else
         {
             nullPtrFound = true;
         }
     }
+
     nullPtrFound = false;
     counter = 1;
-
     while (!nullPtrFound)
     {
         //if the tiles to the left of the space are not nullptr AND within the grid
-        std::cout << "+" << std::endl;
-
         if (!((*boardPtr)[yInput][xInput - counter] == nullptr) && (xInput - counter >= 0))
         {
-            std::cout << "++" << std::endl;
-
             xAxisMove->insertBack((*boardPtr)[yInput][xInput - counter]);
-            std::cout << yInput << xInput << std::endl;
             potentialPoints++;
-            std::cout << "+++" << std::endl;
-            --xInput;
+            counter++;
         }
         else
         {
             nullPtrFound = true;
-            std::cout << "++++" << std::endl;
         }
     }
-    std::cout << "checking xAxisMove" << std::endl;
 
     legalMove = this->checkPlacementLegality(xAxisMove);
+    std::cout << "X goes" << std::endl;
     //if the legnth of the move was six then QWIRKLE is given
-    if(xAxisMove->size()==6){
+    if (xAxisMove->size() == 6)
+    {
         potentialPoints += QWIRKLE;
         std::cout << "QWIRKLE!\n";
     }
@@ -467,47 +469,74 @@ bool GameEngine::boardYAxisLegal(char colour, int shape, int xInput, int yInput,
     bool nullPtrFound = false;
     bool legalMove = false;
     int counter = 1;
-    int potentialPoints = 0;
+    int potentialPoints = 1;
     //selected tile goes into list
     Tile *tilePtr = new Tile(colour, shape);
-    yAxisMove->insertBack(tilePtr);
+    yAxisMove->insertFront(tilePtr);
     //iterate down until a null ptr is found (adding as we go)
     while (!nullPtrFound)
     {
-        //keep adding as long as there is a tile below that is within the grid
-        if (!((*boardPtr)[yInput + counter][xInput] == nullptr) && (yInput + counter <= MAX_MAP_LENGTH))
+
+        if (yInput + counter <= MAX_MAP_LENGTH)
         {
-            yAxisMove->insertBack((*boardPtr)[yInput + counter][xInput]);
-            potentialPoints++;
-        }
-        else
-        {
-            nullPtrFound = true;
+            //keep adding as long as there is a tile below that is within the grid
+            // std::cout << "Y input" << yInput << std::endl;
+            if (!((*boardPtr)[yInput + counter - 1][xInput] == nullptr))
+            {
+                yAxisMove->insertBack((*boardPtr)[yInput + counter - 1][xInput]);
+                potentialPoints++;
+                counter++;
+            }
+            else
+            {
+                nullPtrFound = true;
+            }
         }
     }
+
+    // yAxisMove -> display();
+    //     std::cout << yAxisMove -> size() << std::endl;
+    //             std::cout << "Check the Y Axis ceck"<< std::endl;
+
     nullPtrFound = false;
     counter = 1;
     while (!nullPtrFound)
     {
-        if (!((*boardPtr)[yInput - counter][xInput] == nullptr) && (yInput - counter >= 0))
+
+        //had to put this check before the other as it would cause seg faults (checks if we're going outside board)
+        if (yInput - counter >= 0)
         {
-            yAxisMove->insertBack((*boardPtr)[yInput - counter][xInput]);
-            potentialPoints++;
+            //checks if there is an empty space
+
+            if (!((*boardPtr)[yInput - counter][xInput] == nullptr))
+            {
+                yAxisMove->insertBack((*boardPtr)[yInput - counter][xInput]);
+                potentialPoints++;
+                counter++;
+            }
+            else
+            {
+                nullPtrFound = true;
+            }
         }
         else
         {
             nullPtrFound = true;
         }
     }
+    //yAxisMove -> display();
     legalMove = this->checkPlacementLegality(yAxisMove);
+    std::cout << "Y goes" << legalMove<< std::endl;
     //if the length was 6 then we give an additional 6 points for QWIRKLE
-    if(yAxisMove->size()==6){
+    if (yAxisMove->size() == 6)
+    {
         potentialPoints += QWIRKLE;
         std::cout << "QWIRKLE!\n";
     }
 
-    if(legalMove){
-        *points+=potentialPoints;
+    if (legalMove)
+    {
+        *points += potentialPoints;
     }
     delete yAxisMove;
     return legalMove;
@@ -523,6 +552,10 @@ bool GameEngine::checkPlacementLegality(LinkedList *listToTest)
     int testShape = listToTest->getTile(0)->getShape();
     char testColour = listToTest->getTile(0)->getColour();
 
+    std::cout << "-------1" << std::endl;
+    listToTest->display();
+    std::cout << "-------2" << std::endl;
+
     std::vector<Shape> allShapes = {testShape};
     std::vector<Colour> allColours = {testColour};
 
@@ -534,7 +567,7 @@ bool GameEngine::checkPlacementLegality(LinkedList *listToTest)
             allOneColour = false;
         }
         //check if shapes are all the same
-        if ((!listToTest->getTile(i)->getShape()) == testShape)
+        if (!((listToTest->getTile(i)->getShape()) == testShape))
         {
             allOneShape = false;
         }
@@ -544,16 +577,22 @@ bool GameEngine::checkPlacementLegality(LinkedList *listToTest)
     //if all one colour then we need to confirm that all shapes are different
     if (allOneColour)
     {
+        std::cout << "checking ze shapes" << std::endl;
         for (int i = 0; i < listToTest->size() + 1; i++)
         {
+
             for (int j = i; j < listToTest->size() + 1; j++)
             {
+
                 if (allShapes[j] != allShapes[i])
                 {
                     uniqueShapes = false;
+                    std::cout << "It is unique?" << uniqueShapes << std::endl;
                 }
             }
+            std::cout << "It is unique?" << uniqueShapes << std::endl;
         }
+        std::cout << "It is unique?" << uniqueShapes << std::endl;
     }
     if (allOneShape)
     {
@@ -563,19 +602,21 @@ bool GameEngine::checkPlacementLegality(LinkedList *listToTest)
             {
                 if (allColours[j] != allColours[i])
                 {
-                    uniqueColours = false;
+                    uniqueColours = true;
+                    std::cout << "Is y colour unique" << uniqueColours<< std::endl;
                 }
             }
         }
     }
-    std::cout << "testing" << std::endl;
     //the final check, we need either unique colours AND all one shape OR all one colour AND unique shape
     if ((allOneColour && uniqueShapes) || (allOneShape && uniqueColours))
     {
+        std::cout << "Return True" << std::endl;
         return true;
     }
     else
     {
+
         return false;
     }
 }
@@ -588,7 +629,8 @@ bool GameEngine::replaceTile(std::string *inputPtr)
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
     //check if tile requested exists in hand
-    for(int i = 1; i < playerHand->size() + 1; i++){
+    for (int i = 1; i < playerHand->size() + 1; i++)
+    {
         // checking to see if the tile with correct COLOUR and SHAPE exist in hand
         char colour = playerHand->getTile(i)->getColour();
         int shape = playerHand->getTile(i)->getShape();
@@ -609,14 +651,14 @@ bool GameEngine::replaceTile(std::string *inputPtr)
         }
     }
     //if no return false
-    return false;       
-
+    return false;
 }
 
 //just to check if the tile is on its own, returns true if TILE HAS NO NEIGHBOURS
 //
 //CHANGE TO ONLY CHECK ONE AXIS SO THAT IF IT DOES HAVE A NEIGHBOUR THEN U DO LEGALITY
-bool GameEngine::noNeighboursOnX(int xCoord, int yCoord){
+bool GameEngine::noNeighboursOnX(int xCoord, int yCoord)
+{
 
     //set to true if orientation is empty
     bool east = false;
@@ -624,56 +666,71 @@ bool GameEngine::noNeighboursOnX(int xCoord, int yCoord){
     bool allTrue = false;
 
     //if it is in bounds check (checks west)
-    if(xCoord-1 >= 0){
-        if((*boardPtr)[yCoord][xCoord - 1]==nullptr){
+    if (xCoord - 1 >= 0)
+    {
+        if ((*boardPtr)[yCoord][xCoord - 1] == nullptr)
+        {
             west = true;
         }
     }
     //if out of bounds then we know its not taken
-    else{
+    else
+    {
         west = true;
     }
     //checks east
-    if(xCoord+1 <= MAX_MAP_LENGTH){
-        if((*boardPtr)[yCoord][xCoord + 1]==nullptr){
+    if (xCoord + 1 <= MAX_MAP_LENGTH)
+    {
+        if ((*boardPtr)[yCoord][xCoord + 1] == nullptr)
+        {
             east = true;
         }
     }
-    else{
+    else
+    {
         east = true;
     }
-    if(east && west){
+    if (east && west)
+    {
         allTrue = true;
     }
     return allTrue;
 }
 
-bool GameEngine::noNeighboursOnY(int xCoord, int yCoord){
+bool GameEngine::noNeighboursOnY(int xCoord, int yCoord)
+{
 
     bool north = false;
     bool south = false;
     bool allTrue = false;
     //checks north
     std::cout << yCoord << "\n";
-    if(yCoord-1 >= 0){
-        if((*boardPtr)[yCoord-1][xCoord]==nullptr){
+    if (yCoord - 1 >= 0)
+    {
+        if ((*boardPtr)[yCoord - 1][xCoord] == nullptr)
+        {
             north = true;
         }
     }
-    else{
+    else
+    {
         north = true;
     }
     //checks south
-    if(yCoord+1 < MAX_MAP_LENGTH){
-        if((*boardPtr)[yCoord+1][xCoord]==nullptr){
+    if (yCoord + 1 < MAX_MAP_LENGTH)
+    {
+        if ((*boardPtr)[yCoord + 1][xCoord] == nullptr)
+        {
             south = true;
         }
     }
-    else{
+    else
+    {
         south = true;
     }
 
-    if(north && south){
+    if (north && south)
+    {
         allTrue = true;
     }
     return allTrue;

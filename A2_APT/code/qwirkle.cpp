@@ -272,19 +272,15 @@ void loadGame()
     size_t btPos = 0;
     while ((btPos = copyBoardString.find(boardDelimiter)) != std::string::npos)
     {
-        // std::cout << "Here" << std::endl;
         if (i >= 2)
         {
-            x = 0;
+            x = -1;
             //Grab the first row of the entire board string.
             std::string bRowToken = copyBoardString.substr(0, btPos);
-             std::cout << bRowToken << "[*]" << std::endl;
             size_t tokenPos = 0;
             while ((tokenPos = bRowToken.find(tokenDelimiter)) != std::string::npos)
             {
-                // std::cout << "X" << x << std::endl;
                 std::string bCellToken = bRowToken.substr(0, tokenPos);
-                                std::cout << bCellToken << "[!!]" << std::endl;
 
                 if (std::regex_match(bCellToken, txt_regex)){
                     //Split the row into cells, make tiles, fill board array.
@@ -292,27 +288,24 @@ void loadGame()
                 shape = bCellToken[1];
                 int shapeInt = stoi(shape);
                 const char *colourChar = colour.c_str();
-                std::cout << "[+]" << x << " " << y << std::endl;
                 Tile *boardTile = new Tile(*colourChar, shapeInt);
                 board[y][x] = boardTile;
-                std::cout << "DOES something"<< x << y<< std::endl;
                 bRowToken.erase(0, tokenPos + delimiter.length());
-                // std::cout << bRowToken << "[!!]" << std::endl;
                 }
                 else
                 {
                     bRowToken.erase(0, tokenPos + delimiter.length() - 1);
-                    // std::cout << bRowToken << "[!!!]" << std::endl;
                 }
                 ++x;
             }
 
             ++y;
         }
-        // std::cout << copyBoardString << std::endl;
         copyBoardString.erase(0, btPos + delimiter.length());
         i++;
     }
+
+    
     
     GameEngine *gameEnginePtr = new GameEngine(player1, player2, boardPtr, bagPtr);
 

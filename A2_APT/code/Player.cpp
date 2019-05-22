@@ -4,12 +4,14 @@ using namespace std;
 Player::Player(std::string name)
 {
   this->name = name;
+  this -> points = 0;
 }
 
 Player::Player(std::string name, LinkedList* hand)
 {
   this->name = name;
   this->hand = hand;
+  this -> points = 0;
 }
 
 Player::~Player()

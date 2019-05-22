@@ -18,6 +18,7 @@ LinkedList::~LinkedList()
 
 void LinkedList::insertBack(Tile* tile) //Works
 {
+
     Node* newNode = new Node(tile, nullptr);
     newNode->getTile()->setColour(tile->getColour());
     newNode->getTile()->setShape(tile->getShape());
@@ -203,7 +204,7 @@ void LinkedList::display() //Works and for testing only
 std::string LinkedList::toString()
 {
 
-	std::string stringList;
+	std::string stringList = "";
 	Node *currNode = this->head;
 	while (currNode != nullptr)
 	{
