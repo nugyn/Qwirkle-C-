@@ -190,11 +190,20 @@ void loadGame()
     // bagPtr->bagLinkedList = *bagLList;
 
     //begin parsing objects of the game
-    std::string name = loadGame->playerName1;
+    std::string name1 = loadGame->playerName1;
+    std::string name2 = loadGame -> playerName2;
+    int playerScore1 = (int)loadGame -> playerScore1; 
+    int playerScore2 = (int)loadGame -> playerScore2;
+    std::cout << playerScore1 << std::endl;
+        std::cout << playerScore2 << std::endl;
+
     std::string hand1String = loadGame->playerHand1;
     std::string hand2String = loadGame->playerHand2;
     std::string bagStr = loadGame->bag;
     std::string boardStr = loadGame->board;
+    std::string activePlayer = loadGame -> activePlayer;
+
+
 
     std::string delimiter = ", ";
 
@@ -243,7 +252,9 @@ void loadGame()
     //TODO Fill Board (2D Array)
     Player **players = new Player *[NUMBER_OF_PLAYERS];
     Player *player1 = new Player(loadGame->playerName1, hand1);
+    player1 -> setPoints(playerScore1);
     Player *player2 = new Player(loadGame->playerName2, hand2);
+    player2 -> setPoints(playerScore2);
     bagPtr->bagLinkedList = *bagLList;
 
     players[1] = player1;
@@ -274,7 +285,7 @@ void loadGame()
     {
         if (i >= 2)
         {
-            x = -1;
+            x = -1; // IT will mismatch the coordinates at this point
             //Grab the first row of the entire board string.
             std::string bRowToken = copyBoardString.substr(0, btPos);
             size_t tokenPos = 0;
@@ -283,18 +294,21 @@ void loadGame()
                 std::string bCellToken = bRowToken.substr(0, tokenPos);
 
                 if (std::regex_match(bCellToken, txt_regex)){
+                    
                     //Split the row into cells, make tiles, fill board array.
                     colour = bCellToken[0];
-                shape = bCellToken[1];
-                int shapeInt = stoi(shape);
-                const char *colourChar = colour.c_str();
-                Tile *boardTile = new Tile(*colourChar, shapeInt);
-                board[y][x] = boardTile;
-                bRowToken.erase(0, tokenPos + delimiter.length());
+                    shape = bCellToken[1];
+                    int shapeInt = stoi(shape);
+                    const char *colourChar = colour.c_str();
+                    Tile *boardTile = new Tile(*colourChar, shapeInt);
+                    board[y][x] = boardTile;
+                    bRowToken.erase(0, tokenPos + delimiter.length() - 1);
+                    std::cout <<"tokenPos" <<tokenPos << " delimiter "<< delimiter.length() << std::endl;
+                    std::cout <<shapeInt << *colourChar << std::endl;
                 }
                 else
                 {
-                    bRowToken.erase(0, tokenPos + delimiter.length() - 1);
+                    bRowToken.erase(0, tokenPos + delimiter.length() - 1); //erases the empty token
                 }
                 ++x;
             }

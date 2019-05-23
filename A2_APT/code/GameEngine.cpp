@@ -104,7 +104,6 @@ bool GameEngine::getValidFormatMove(std::string *inputPtr)
 
         this->saveGame(inputPtr);
         valid = true;
-        std::cout << "fuck" << std::endl;
     }
     return valid;
 }

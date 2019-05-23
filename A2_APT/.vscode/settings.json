@@ -53,6 +53,14 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "deque": "cpp",
+        "regex": "cpp",
+        "sstream": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "clocale": "cpp",
+        "unordered_map": "cpp",
+        "optional": "cpp"
     }
 }
