@@ -5,6 +5,7 @@
 #include "Tile.h"
 #include "Player.h"
 #include "Bag.h"
+#include "IOCode.h"
 
 #define HANDSIZE        6
 #define REPLACE_COLOUR  8
@@ -42,6 +43,8 @@ class GameEngine{
     bool boardXAxisLegal(char colour, int shape, int xInput, int yInput, int* points);
     bool boardYAxisLegal(char colour, int shape, int xInput, int yInput, int* points);
     bool checkPlacementLegality(LinkedList* listToTest);
+    void saveGame(std::string* inputFileName);
+    SaveGame* convertToSaveGame();
     public:
     GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bag);
     ~GameEngine();

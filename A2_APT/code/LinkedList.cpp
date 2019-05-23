@@ -153,7 +153,7 @@ Tile* LinkedList::getTile(Tile *tile) //Works
 	return returnTile;
 }
 
-Tile* LinkedList::getTile(int pos)	//Works 
+Tile* LinkedList::getTile(int pos)	//Works
 {
 	Node* currNode = nullptr;
 	currNode = this->head;
@@ -199,4 +199,17 @@ void LinkedList::display() //Works and for testing only
 		std::cout << "Colour : " << currNode->getTile()->getColour() << " Shape: " << currNode->getTile()->getShape() << "\n";
 		currNode = currNode->getNext();
 	}
+}
+
+std::string LinkedList::toString()
+{
+
+	std::string stringList = "";
+	Node *currNode = this->head;
+	while (currNode != nullptr)
+	{
+		stringList += currNode->getTile()->toString() + ", ";
+		currNode = currNode->getNext();
+	}
+	return stringList;
 }

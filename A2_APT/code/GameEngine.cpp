@@ -6,6 +6,8 @@
 //this regex makes sure that we are getting the right format for the "place..." and "replace..."
 std::regex place("(place )[ROYGBP][1-6]( at )[A-Z](2[0-5]|1[0-9]|0?[0-9])");
 std::regex replace("(replace )[ROYGBP][1-6]");
+//matches save followed by any character between 1 and 20 times
+std::regex save("(save ).{1,20}");
 
 GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bagPtr){
 
@@ -15,7 +17,7 @@ GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr
     this->bag = bagPtr;
 
 }
-//to DO 
+//to DO
 GameEngine::~GameEngine(){
 
 }
@@ -57,10 +59,10 @@ void GameEngine::newGame(){
 }
 //gets input and checks it is either "place <tile> at XY" OR "replace <tile>"
 bool GameEngine::getValidFormatMove(std::string* inputPtr){
- 
+
     //clears the cin stream
     bool valid = false;
-    
+
     //now gets the input from the user and puts it into both inputPtr AND the toTest string
     std::getline(std::cin, *inputPtr);
     std::string toTest = *inputPtr;
@@ -69,12 +71,12 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
     if(std::cin.eof()){
         valid = true;
     }
-    
+
     //if one of the regexs PASS then we allow to continue
     if(std::regex_match(toTest, replace)){
         //if the tile is able to be removed return true
         if(this->replaceTile(inputPtr)){
-         
+
             valid = true;
         }
     }
@@ -84,7 +86,14 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
         if(this->placeTile(inputPtr)){
             valid = true;
         }
-    }      
+    }
+
+    if(std::regex_match(toTest, save)){
+        toTest.erase(0, 5);
+        std::string* fileName = &toTest;
+        this->saveGame(fileName);
+        valid = true;
+    }
 
         return valid;
 }
@@ -93,7 +102,7 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
 void GameEngine::playerMove(){
 
     this->printGameStatus();
- 
+
     //gets the first attempt from the user for valid turn
     std::string input;
     std::string* inputPtr = &input;
@@ -104,6 +113,78 @@ void GameEngine::playerMove(){
     }
 
 }
+
+void GameEngine::saveGame(std::string *inputFileName)
+{
+    IOCode *fileSaver = new IOCode();
+    SaveGame *saveGame = this->convertToSaveGame();
+
+    fileSaver->writeFile(saveGame, inputFileName);
+}
+
+SaveGame *GameEngine::convertToSaveGame()
+{
+    SaveGame *saveGame = new SaveGame();
+
+    std::string *name1 = player1->getName();
+    std::string *name2 = player2->getName();
+    int *score1 = player1->getPoints();
+    int *score2 = player2->getPoints();
+
+    LinkedList *hand1 = player1->getHand();
+    LinkedList *hand2 = player2->getHand();
+
+    std::string hand1String = hand1->toString();
+    std::string hand2String = hand2->toString();
+    std::string bagString = bag->toString();
+
+    std::string boardString = "   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25\n";
+    boardString += "   ------------------------------------------------------------------------------";
+    //primitive data types ;)
+    char letters = 'A';
+    std::string stringLetter(1, letters);
+    for (int i = 0; i < MAX_MAP_LENGTH; i++)
+    {
+        std::string stringLetter(1, letters);
+
+        boardString += "\n" + stringLetter + " |";
+
+        for (int j = 0; j < MAX_MAP_LENGTH; j++)
+        {
+            if ((*boardPtr)[i][j] == nullptr)
+            {
+                boardString += "  |";
+            }
+            else
+            {
+                std::string tile = (*boardPtr)[i][j]->toString();
+
+                boardString += tile + '|';
+            }
+        }
+        letters++;
+    }
+    boardString += "\n   ------------------------------------------------------------------------------";
+
+    std::string *activePlayerString = activePlayer->getName();
+
+    saveGame->playerName1 = *name1;
+
+    saveGame->playerHand1 = hand1String;
+
+    saveGame->playerScore1 = *score1;
+
+    saveGame->playerName2 = *name2;
+    saveGame->playerHand2 = hand2String;
+    saveGame->playerScore2 = *score2;
+
+    saveGame->bag = bagString;
+    saveGame->board = boardString;
+    saveGame->activePlayer = *activePlayerString;
+
+    return saveGame;
+}
+
 
 void GameEngine::gameOver(){
 
@@ -236,7 +317,7 @@ bool GameEngine::placeTile(std::string* inputPtr){
     else{
         legalMoveX = true;
     }
-    if(!this->noNeighboursOnY(xCoord, yCoord)){           
+    if(!this->noNeighboursOnY(xCoord, yCoord)){
         if(this->boardYAxisLegal(validColourSelect, validShapeSelect, xCoord, yCoord, pointsPtr)){
             legalMoveY = true;
         }
@@ -304,7 +385,7 @@ bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput,
         else{
             nullPtrFound = true;
         }
-    }  
+    }
     legalMove = this->checkPlacementLegality(xAxisMove);
     //if the legnth of the move was six then QWIRKLE is given
     if(xAxisMove->size()==6){
@@ -388,9 +469,9 @@ bool GameEngine::checkPlacementLegality(LinkedList* listToTest){
     bool uniqueShapes = true;
     int testShape = listToTest->getTile(listToTest->size())->getShape();
     char testColour = listToTest->getTile(listToTest->size())->getColour();
-    int allShapes[listToTest->size()] = {testShape}; 
+    int allShapes[listToTest->size()] = {testShape};
     char allColours[listToTest->size()] = {testColour};
- 
+
     //starts at 1 because we aregoing to be comparing all elements to the testColour which is based off pos 0
     for(int i = 1; i < listToTest->size(); i++){
         //check if colours are all the same
@@ -469,7 +550,7 @@ bool GameEngine::replaceTile(std::string* inputPtr){
         }
     }
     //if no return false
-    return false;       
+    return false;
 
 }
 
@@ -514,7 +595,6 @@ bool GameEngine::noNeighboursOnY(int xCoord, int yCoord){
     bool south = false;
     bool allTrue = false;
     //checks north
-    std::cout << yCoord << "\n";
     if(yCoord-1 >= 0){
         if((*boardPtr)[yCoord-1][xCoord]==nullptr){
             north = true;

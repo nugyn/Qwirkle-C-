@@ -1,6 +1,6 @@
 #include "Bag.h"
 #include <time.h>
-#include <stdlib.h>  
+#include <stdlib.h>
 
 void Bag::fillBag()
 {
@@ -21,7 +21,7 @@ void Bag::fillBag()
 			tempTile->setColour(BLUE);
 		if (i >= 60 && i < 72)
 			tempTile->setColour(PURPLE);
-	
+
 		firstLinkedList.insertFront(tempTile);
 	}
 	shuffleBag();
@@ -65,5 +65,11 @@ LinkedList* Bag::getTiles(){
     LinkedList* tilesPtr = new LinkedList();
     tilesPtr = &bagLinkedList;
     return tilesPtr;
-    
+
+}
+
+std::string Bag::toString(){
+	LinkedList *bagList = &(bagLinkedList);
+	std::string bagString = bagList -> toString();
+	return bagString;
 }
