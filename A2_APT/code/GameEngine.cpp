@@ -9,13 +9,19 @@ std::regex replace("(replace )[ROYGBP][1-6]");
 //matches save followed by any character between 1 and 20 times
 std::regex save("(save ).{1,20}");
 
-GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bagPtr){
+GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bagPtr, std::string startingPlayer){
 
     this->player1 = playerOne;
     this->player2 = playerTwo;
     this->boardPtr = boardPtr;
     this->bag = bagPtr;
-
+    this->startingPlayer = startingPlayer;
+    if(startingPlayer==*(player1->getName())){
+        activePlayer = player1;
+    }
+    else{
+        activePlayer = player2;
+    }
 }
 //to DO
 GameEngine::~GameEngine(){
@@ -24,13 +30,13 @@ GameEngine::~GameEngine(){
 
 void GameEngine::newGame(){
 
-    activePlayer = player1;
+   // activePlayer = player1;
 
     //while no players hand is empty keep getting turns
     LinkedList* playerOneHand = player1->getHand();
     LinkedList* playerTwoHand = player2->getHand();
     //keeps track of the turns for player allocation
-    int turn = 0;
+    //int turn = *turnPtr;
     turnPtr = &turn;
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -93,6 +99,8 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
         std::string* fileName = &toTest;
         this->saveGame(fileName);
         valid = true;
+        //A 1 by any other name would smell as sweet
+        *turnPtr -= valid;
     }
 
         return valid;

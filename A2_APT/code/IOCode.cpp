@@ -85,7 +85,7 @@ SaveGame *IOCode::readFile(std::string fileName)
                 iss >> number;
                 if (!iss.good())
                 {
-                    sg -> playerScore1 = number;
+                    sg -> playerScore2 = number;
                     ++playerPos;
                 }
             }
@@ -149,7 +149,9 @@ SaveGame *IOCode::readFile(std::string fileName)
                 }
             }
         }
+        sg -> activePlayer = line;
     }
+
 
     return sg;
 }

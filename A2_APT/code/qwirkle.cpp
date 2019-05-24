@@ -143,7 +143,7 @@ void newGame(){
             }
         }
         //make the whole board nullptr
-        GameEngine* gameEnginePtr = new GameEngine(players[0], players[1] , boardPtr, bagPtr);
+        GameEngine* gameEnginePtr = new GameEngine(players[0], players[1] , boardPtr, bagPtr, playerNames[0]);
         gameEnginePtr->newGame();
         delete gameEnginePtr;
         //loop through to delete?
@@ -296,9 +296,7 @@ void loadGame()
         i++;
     }
 
-
-
-    GameEngine *gameEnginePtr = new GameEngine(player1, player2, boardPtr, bagPtr);
+    GameEngine *gameEnginePtr = new GameEngine(player1, player2, boardPtr, bagPtr, activePlayer);
 
     gameEnginePtr->newGame();
 

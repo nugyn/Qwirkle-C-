@@ -28,8 +28,10 @@ class GameEngine{
     LinkedList* playerHand;
     LinkedList* bagTiles;
     Bag* bag;
+    std::string startingPlayer;
     //board is going to be a 2d array of tilePtrs
     TilePtr*** boardPtr;
+    int turn;
     int* turnPtr;
     void gameOver();
     bool noNeighboursOnX(int xCoord, int yCoord);
@@ -46,7 +48,7 @@ class GameEngine{
     void saveGame(std::string* inputFileName);
     SaveGame* convertToSaveGame();
     public:
-    GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bag);
+    GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bag, std::string startingPlayer);
     ~GameEngine();
     void newGame();
 
