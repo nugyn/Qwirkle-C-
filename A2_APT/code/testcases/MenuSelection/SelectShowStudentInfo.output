@@ -1,3 +1,13 @@
+Welcome to Qwirkle!
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Show student information
+4. Quit
+> 3
+
 --------------------------------
 Name: Duy Nguyen
 Student ID: s3429599
@@ -6,12 +16,21 @@ Email: s3429599@student.rmit.edu.au
 Name: Justin Cooper
 Student ID: s3720189
 Email: s3720189@student.rmit.edu.au
-    
+
 Name: Koby Gean
 Student ID: s3681583
 Email: s3681583@student.rmit.edu.au
 
- Name: Jack Kelly
+Name: Jack Kelly
 Student ID: s3707748
 Email: s3707748@student.rmit.edu.au
+
 --------------------------------
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Show student information
+4. Quit
+> 

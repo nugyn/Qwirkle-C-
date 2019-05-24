@@ -334,6 +334,7 @@ bool GameEngine::placeTile(std::string* inputPtr){
         legalMoveY = true;
     }
     //if the move is completely LEGAL
+
     if(isInHand && emptySpace && legalMoveX && legalMoveY && tileHasNeighbour){
         //get from player hand and place tile on the board
         Tile* tileToPlace = playerHand->getTile(tilePositionInHand);
