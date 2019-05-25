@@ -14,9 +14,9 @@ public:
 
 	void deleteFront();
 	void deleteBack();
-	void deletePosition(int pos);
+	void deleteNode(Tile * tile);
 
-	Tile* getTile(int pos);
+	Tile* getTile(Tile* tile);
 	void clear();
 	int size();
 	void display();

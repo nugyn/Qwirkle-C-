@@ -16,8 +16,8 @@ Node::Node(Tile* tileVal, Node* nextVal, Node* prevVal)
 
 Node::~Node()
 {
-	
 }
+
 
 Node* Node::getNext()
 {

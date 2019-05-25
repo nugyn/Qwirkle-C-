@@ -1,17 +1,19 @@
 #include "LinkedList.h"
+#include <string>
 
 class Player{
 
 public:
     std::string name;
     int points;
-    LinkedList hand;
+    LinkedList* hand;
 
     Player(std::string name);
+    Player(std::string name, LinkedList* hand);
     ~Player();
 
     // Testing method, sets hand to given LinkedList
-    void setHand(LinkedList hand);
+    void setHand(LinkedList* hand);
     // Sets player score to given value
     void setPoints(int points);
     // Increases player score by given value
@@ -27,13 +29,12 @@ public:
     std::string* getName();
 
     // Adds tile to hand
-    void addTile(Tile tile);
-    // Returns pointer to tile with corresponding colour
-    // and shape. Could use hash for quick check?
+    void addTile(Tile * tile);
+    // Gets tile from hand
     Tile* getTile(Colour color, Shape shape);
     // Removes tile from hand
-    void removeTile(Tile* tile);
+    void removeTile(Colour colour, Shape shape);
 
   private:
-    Tile* findTile(Tile tile);
+    Tile* findTile(Colour colour, Shape shape);
 }
