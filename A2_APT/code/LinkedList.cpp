@@ -213,3 +213,16 @@ std::string LinkedList::toString()
 	}
 	return stringList;
 }
+bool LinkedList::isEmpty(){
+
+	if(this -> head == nullptr){
+		return true;
+	}	
+	else
+	{
+		return false;
+	}
+
+
+
+}

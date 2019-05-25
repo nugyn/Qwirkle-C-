@@ -28,6 +28,7 @@ class GameEngine{
     LinkedList* playerHand;
     LinkedList* bagTiles;
     Bag* bag;
+    bool exit;
     std::string startingPlayer;
     //board is going to be a 2d array of tilePtrs
     TilePtr*** boardPtr;

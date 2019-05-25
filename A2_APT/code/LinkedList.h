@@ -27,7 +27,7 @@ public:
 	void clear();
 	int size();
 	void display();
-
+	bool isEmpty();
 
 
 private:

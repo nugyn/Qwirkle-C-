@@ -60,6 +60,9 @@ void mainMenu(){
        else{
            std::cout << "Invalid Input" << std::endl;
        }
+       if(input != '3'){
+	   exitProgram = true;
+	}
    }
 }
 
@@ -101,7 +104,8 @@ void newGame(){
     //Make the players and give them their hands
     for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
         while(!validName && !std::cin.eof()){
-            std::cout << "Enter a name for player " << i + 1 << "\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Enter a name for player " << i + 1 << "(letters only)\n";
             std::cout << ">";
             std::cin >> playerNames[i];
             if(std::regex_match(playerNames[i], nameFormat)){
@@ -121,6 +125,7 @@ void newGame(){
             else{
                 if(!std::cin.eof()){
                     std::cout << "Only letters allowed \n";
+			std::cout << "Invalid Name \n";
                     //exits the for loop
                     i = NUMBER_OF_PLAYERS;
                 }

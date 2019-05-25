@@ -8,6 +8,7 @@ std::regex place("(place )[ROYGBP][1-6]( at )[A-Z](2[0-5]|1[0-9]|0?[0-9])");
 std::regex replace("(replace )[ROYGBP][1-6]");
 //matches save followed by any character between 1 and 20 times
 std::regex save("(save ).{1,20}");
+std::regex quit("(quit)");
 
 GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bagPtr, std::string startingPlayer){
 
@@ -22,6 +23,8 @@ GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr
     else{
         activePlayer = player2;
     }
+	turn = 0;
+	exit = false;
 }
 //to DO
 GameEngine::~GameEngine(){
@@ -41,7 +44,7 @@ void GameEngine::newGame(){
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     //while neither players hand is empty (the players hands will never be empty whilst the bag still has tiles)
-    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr && !std::cin.eof()){
+    while(playerOneHand->isEmpty() && playerTwoHand->isEmpty() && !std::cin.eof() && !exit){
 
         this->playerMove();
         turn++;
@@ -51,13 +54,13 @@ void GameEngine::newGame(){
         else{
             activePlayer = player2;
         }
-        if(!std::cin.eof()){
+        if(!std::cin.eof() && !exit){
             std::cout << "end of turn " << turn << "\n";
         }
 
     }
     //The winner is declared here
-    if(!std::cin.eof()){
+    if(!std::cin.eof() && !exit){
         this->gameOver();
     }
 
@@ -102,7 +105,10 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
         //A 1 by any other name would smell as sweet
         *turnPtr -= valid;
     }
-
+    if(std::regex_match(toTest, quit){
+	valid = true;
+	exit = true;	
+    }
         return valid;
 }
 
@@ -197,13 +203,13 @@ SaveGame *GameEngine::convertToSaveGame()
 void GameEngine::gameOver(){
 
     std::cout << "Game over\n";
-    std::cout << "Score for " << player1->getName() << " : " << *(player1->getPoints()) << "\n";
-    std::cout << "Score for " << player2->getName() << " : " << *(player2->getPoints()) << "\n";
+    std::cout << "Score for " << *player1->getName() << " : " << *(player1->getPoints()) << "\n";
+    std::cout << "Score for " << *player2->getName() << " : " << *(player2->getPoints()) << "\n";
     if(*(player1->getPoints()) > *(player2->getPoints())){
         std::cout << "Player " << player1->getName() << " won!\n";
     }
     else if(*(player2->getPoints()) > *(player1->getPoints())){
-        std::cout << "Player " << player2->getName() << " won!\n";
+        std::cout << "Player " << *player2->getName() << " won!\n";
     }
     else{
         std::cout << "Tie game, you both win! :)";
@@ -334,7 +340,6 @@ bool GameEngine::placeTile(std::string* inputPtr){
         legalMoveY = true;
     }
     //if the move is completely LEGAL
-
     if(isInHand && emptySpace && legalMoveX && legalMoveY && tileHasNeighbour){
         //get from player hand and place tile on the board
         Tile* tileToPlace = playerHand->getTile(tilePositionInHand);
@@ -342,7 +347,7 @@ bool GameEngine::placeTile(std::string* inputPtr){
         //remove from player hand
         playerHand->deletePosition(tilePositionInHand);
         //get a tile from the bag and place in player hand (if bag has tiles)
-        if(bagTiles->getTile(0)!=nullptr){
+        if(!bagTiles->isEmpty()){
             tileToPlace = bagTiles->getTile(0);
             playerHand->insertBack(tileToPlace);
             bagTiles->deleteFront();
@@ -539,6 +544,10 @@ bool GameEngine::replaceTile(std::string* inputPtr){
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
     //check if tile requested exists in hand
+    if(bagTiles -> isEmpty()){
+	std::cout << "Cannot replace tile, bag is empty \n";	
+    }
+    else{
     for(int i = 1; i < playerHand->size() + 1; i++){
         // checking to see if the tile with correct COLOUR and SHAPE exist in hand
         char colour = playerHand->getTile(i)->getColour();
@@ -557,6 +566,7 @@ bool GameEngine::replaceTile(std::string* inputPtr){
             bagTiles->deleteFront();
             return true;
         }
+     }
     }
     //if no return false
     return false;
