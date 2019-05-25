@@ -206,7 +206,7 @@ void GameEngine::gameOver(){
     std::cout << "Score for " << *player1->getName() << " : " << *(player1->getPoints()) << "\n";
     std::cout << "Score for " << *player2->getName() << " : " << *(player2->getPoints()) << "\n";
     if(*(player1->getPoints()) > *(player2->getPoints())){
-        std::cout << "Player " << player1->getName() << " won!\n";
+        std::cout << "Player " << *player1->getName() << " won!\n";
     }
     else if(*(player2->getPoints()) > *(player1->getPoints())){
         std::cout << "Player " << *player2->getName() << " won!\n";
