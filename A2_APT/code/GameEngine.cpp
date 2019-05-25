@@ -8,6 +8,7 @@ std::regex place("(place )[ROYGBP][1-6]( at )[A-Z](2[0-5]|1[0-9]|0?[0-9])");
 std::regex replace("(replace )[ROYGBP][1-6]");
 //matches save followed by any character between 1 and 20 times
 std::regex save("(save ).{1,20}");
+std::regex quit("(quit)");
 
 GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr, Bag* bagPtr, std::string startingPlayer){
 
@@ -23,6 +24,7 @@ GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr
         activePlayer = player2;
     }
     turn = 0; 
+    exit = false;
 }
 //to DO
 GameEngine::~GameEngine(){
@@ -42,7 +44,7 @@ void GameEngine::newGame(){
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     //while neither players hand is empty (the players hands will never be empty whilst the bag still has tiles)
-    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr && !std::cin.eof()){
+    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr && !std::cin.eof() && !exit){
 
         this->playerMove();
         turn++;
@@ -52,13 +54,13 @@ void GameEngine::newGame(){
         else{
             activePlayer = player2;
         }
-        if(!std::cin.eof()){
+        if(!std::cin.eof() && !exit){
             std::cout << "end of turn " << turn << "\n";
         }
 
     }
     //The winner is declared here
-    if(!std::cin.eof()){
+    if(!std::cin.eof() && !exit){
         this->gameOver();
     }
 
@@ -103,6 +105,12 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
         //A 1 by any other name would smell as sweet
         *turnPtr -= valid;
     }
+
+    if(std::regex_match(toTest, quit)){
+        valid = true;
+        exit = true;
+    }
+
 
         return valid;
 }
