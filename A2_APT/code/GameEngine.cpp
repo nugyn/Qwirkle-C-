@@ -105,7 +105,7 @@ bool GameEngine::getValidFormatMove(std::string* inputPtr){
         //A 1 by any other name would smell as sweet
         *turnPtr -= valid;
     }
-    if(std::regex_match(toTest, quit){
+    if(std::regex_match(toTest, quit)){
 	valid = true;
 	exit = true;	
     }

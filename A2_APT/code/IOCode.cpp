@@ -136,7 +136,8 @@ SaveGame *IOCode::readFile(std::string fileName)
             if (boardPos == -2 && boardFill == false)
             {
                 if (other == 1)
-                {
+                {   
+                    std::cout << line << std::endl;
                     if(line == "\n"){
                        sg -> bag = line;
                        ++other;
