@@ -44,7 +44,7 @@ void GameEngine::newGame(){
     //ignores everything in the input stream up to a newline chracter which it then clears (DONT THINK I NEED THIS ANYMORE delete limits if case)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     //while neither players hand is empty (the players hands will never be empty whilst the bag still has tiles)
-    while(playerOneHand->getTile(0)!=nullptr && playerTwoHand->getTile(0)!=nullptr && !std::cin.eof() && !exit){
+    while(!playerOneHand->isEmpty() && !playerTwoHand->isEmpty() && !std::cin.eof() && !exit){
 
         this->playerMove();
         turn++;
@@ -206,13 +206,13 @@ SaveGame *GameEngine::convertToSaveGame()
 void GameEngine::gameOver(){
 
     std::cout << "Game over\n";
-    std::cout << "Score for " << player1->getName() << " : " << *(player1->getPoints()) << "\n";
-    std::cout << "Score for " << player2->getName() << " : " << *(player2->getPoints()) << "\n";
+    std::cout << "Score for " << *player1->getName() << " : " << *(player1->getPoints()) << "\n";
+    std::cout << "Score for " << *player2->getName() << " : " << *(player2->getPoints()) << "\n";
     if(*(player1->getPoints()) > *(player2->getPoints())){
         std::cout << "Player " << player1->getName() << " won!\n";
     }
     else if(*(player2->getPoints()) > *(player1->getPoints())){
-        std::cout << "Player " << player2->getName() << " won!\n";
+        std::cout << *player2->getName() << " won!\n";
     }
     else{
         std::cout << "Tie game, you both win! :)";
