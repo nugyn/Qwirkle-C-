@@ -22,6 +22,7 @@ GameEngine::GameEngine(Player* playerOne, Player* playerTwo, TilePtr*** boardPtr
     else{
         activePlayer = player2;
     }
+    turn = 0; 
 }
 //to DO
 GameEngine::~GameEngine(){
