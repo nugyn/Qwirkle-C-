@@ -350,11 +350,14 @@ bool GameEngine::placeTile(std::string* inputPtr){
         //remove from player hand
         playerHand->deletePosition(tilePositionInHand);
         //get a tile from the bag and place in player hand (if bag has tiles)
-        if(bagTiles->getTile(0)!=nullptr){
+        std::cout << "just before oh no notiles left\n";
+        if(!bagTiles->isEmpty()){
+            std::cout << "should be skipped\n";
             tileToPlace = bagTiles->getTile(0);
             playerHand->insertBack(tileToPlace);
             bagTiles->deleteFront();
         }
+        std::cout << "Oh no, no tiles left\n";
         activePlayer->addPoints(points);
         //lastly if this was the first turn of the game then the player needs to be given one point
         if((*turnPtr)==0){
@@ -547,23 +550,28 @@ bool GameEngine::replaceTile(std::string* inputPtr){
     playerHand = activePlayer->getHand();
     bagTiles = bag->getTiles();
     //check if tile requested exists in hand
-    for(int i = 1; i < playerHand->size() + 1; i++){
-        // checking to see if the tile with correct COLOUR and SHAPE exist in hand
-        char colour = playerHand->getTile(i)->getColour();
-        int shape = playerHand->getTile(i)->getShape();
-        char colourSelect = (*inputPtr)[REPLACE_COLOUR];
-        //this - '0' helps us convert the char to the accurate int
-        int shapeSelect = (*inputPtr)[REPLACE_SHAPE] - '0';
-        if(colour==colourSelect && shape==shapeSelect){
-            //  remove tile from hand and add to back of bag
-            Tile* tile = playerHand->getTile(i);
-            bagTiles->insertBack(tile);
-            playerHand->deletePosition(i);
-            //  remove top of bag and add to player hand
-            tile = bagTiles->getTile(0);
-            playerHand->insertBack(tile);
-            bagTiles->deleteFront();
-            return true;
+    if(bagTiles->isEmpty()){
+        std::cout << "Cannot replace tile, bag is empty\n";
+    }
+    else{
+        for(int i = 1; i < playerHand->size() + 1; i++){
+            // checking to see if the tile with correct COLOUR and SHAPE exist in hand
+            char colour = playerHand->getTile(i)->getColour();
+            int shape = playerHand->getTile(i)->getShape();
+            char colourSelect = (*inputPtr)[REPLACE_COLOUR];
+            //this - '0' helps us convert the char to the accurate int
+            int shapeSelect = (*inputPtr)[REPLACE_SHAPE] - '0';
+            if(colour==colourSelect && shape==shapeSelect){
+                //  remove tile from hand and add to back of bag
+                Tile* tile = playerHand->getTile(i);
+                bagTiles->insertBack(tile);
+                playerHand->deletePosition(i);
+                //  remove top of bag and add to player hand
+                tile = bagTiles->getTile(0);
+                playerHand->insertBack(tile);
+                bagTiles->deleteFront();
+                return true;
+            }
         }
     }
     //if no return false
