@@ -43,12 +43,12 @@ SaveGame *IOCode::readFile(std::string fileName)
     SaveGame *sg = new SaveGame();
     std::string value = "";
     std::string board = "";
-    int i = 29;
-    int playerPos = 1;
-    int currentPlayer = 1;
-    int boardPos = 29;
-    int other = 0;
-    bool boardFill = false;
+    int i = 29; //The lines it must read 
+    int playerPos = 1; // To track which line it is reading to determine which line belongs to which player
+    int currentPlayer = 1; // The  #player lines it is reading
+    int boardPos = 29; //Counter Lines to read for the board
+    int other = 0; // Counter for the last two lines, bag and activePlayer
+    bool boardFill = false; //flag to indicate whe the board should be
     for (std::string line; getline(inFile, line);)
     {
         if ((playerPos % 3) == 1) //read first line
@@ -137,10 +137,14 @@ SaveGame *IOCode::readFile(std::string fileName)
             {
                 if (other == 1)
                 {
-
-                    sg -> bag = line;
-                    ++other;
-                }
+                    if(line == "\n"){
+                       sg -> bag = line;
+                       ++other;
+                    }
+		            else{
+			              std::cout << "Bag is empty" << std::endl;
+		            }
+		        }
                 else if (other == 2)
                 {
 
