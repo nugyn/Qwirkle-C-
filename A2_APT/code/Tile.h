@@ -1,10 +1,15 @@
-#pragma once
+#ifndef TILE_H
+#define TILE_H
+
 #include "TileCodes.h"
+#include <string>
+#include <sstream>
+#include <iostream>
 
 typedef char Colour;
 typedef int Shape;
 
-class Tile 
+class Tile
 {
 public:
 
@@ -15,6 +20,7 @@ public:
 	Shape getShape();
 	void setColour(Colour colour);
 	void setShape(Shape shape);
+	std::string toString();
 
 
 private:
@@ -22,3 +28,5 @@ private:
 	Colour colour;
 	Shape  shape;
 };
+
+#endif // TILE_H

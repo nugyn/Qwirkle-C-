@@ -1,13 +1,12 @@
 #include "Bag.h"
-#include "TileCodes.h"
 #include <time.h>
-#include <stdlib.h>  
+#include <stdlib.h>
 
 void Bag::fillBag()
 {
 	for (int i = 0; i < 72; i++)
 	{
-		Tile* tempTile = new Tile(NULL, NULL);
+		Tile* tempTile = new Tile('R', 1);
 		tempTile->setShape((i % 6) + 1);
 
 		if (i < 12)
@@ -22,7 +21,7 @@ void Bag::fillBag()
 			tempTile->setColour(BLUE);
 		if (i >= 60 && i < 72)
 			tempTile->setColour(PURPLE);
-	
+
 		firstLinkedList.insertFront(tempTile);
 	}
 	shuffleBag();
@@ -60,4 +59,17 @@ void Bag::shuffleBag()
 		}
 		bagLinkedList = firstLinkedList;
 	}
+}
+LinkedList* Bag::getTiles(){
+
+    LinkedList* tilesPtr = new LinkedList();
+    tilesPtr = &bagLinkedList;
+    return tilesPtr;
+
+}
+
+std::string Bag::toString(){
+	LinkedList *bagList = &(bagLinkedList);
+	std::string bagString = bagList -> toString();
+	return bagString;
 }

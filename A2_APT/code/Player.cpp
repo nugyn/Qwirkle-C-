@@ -1,4 +1,4 @@
-#include "Player.h";
+#include "Player.h"
 
 using namespace std;
 Player::Player(std::string name)
@@ -33,8 +33,7 @@ void Player::addPoints(int points)
 
 LinkedList* Player::getHand()
 {
-  LinkedList *handPtr = &hand;
-  return handPtr;
+  return hand;
 }
 
 int* Player::getPoints()
