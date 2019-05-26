@@ -6,17 +6,15 @@ Menu
 2. Load Game
 3. Show student information
 4. Quit
-> 2
-
+> 
 Enter the filename you wish to load
->testSave
-Linh, it's your turn 
-Score for Linh 1
-Score for Nguyen 2
+>Jack, it's your turn 
+Score for Jack 2
+Score for Kelly 0
    0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
    ------------------------------------------------------------------------------
-A |  |G5|B5|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-B |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+A |  |Y5|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |Y2|O2|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 C |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 D |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 E |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -43,17 +41,11 @@ Y |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
    ------------------------------------------------------------------------------
 Your hand is
-Y3,P2,O3,B1,Y4,Y5
-> place Y3 at Z31
-invalid move.
+P6,O4,P3,P6,R3,R2
+> invalid move.
 Try again
-> place Y3 at Y31
-invalid move.
+> invalid move.
 Try again
-> place Y3 at Y32
-invalid move.
+> invalid move.
 Try again
-> place Y3 at A31
-invalid move.
-Try again
->
+> Goodbye!
