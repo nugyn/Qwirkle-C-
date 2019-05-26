@@ -37,6 +37,7 @@ class GameEngine{
     void gameOver();
     bool noNeighboursOnX(int xCoord, int yCoord);
     bool noNeighboursOnY(int xCoord, int yCoord);
+    bool emptyBoard();
     bool getValidFormatMove(std::string* inputPtr);
     bool replaceTile(std::string* inputPtr);
     bool placeTile(std::string* inputPtr);

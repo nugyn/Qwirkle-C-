@@ -1,6 +1,7 @@
 #include "GameEngine.h"
 #include <limits>
 #include <iostream>
+#include <cwctype>
 
 
 //this regex makes sure that we are getting the right format for the "place..." and "replace..."
@@ -137,6 +138,8 @@ void GameEngine::saveGame(std::string *inputFileName)
     SaveGame *saveGame = this->convertToSaveGame();
 
     fileSaver->writeFile(saveGame, inputFileName);
+
+    delete fileSaver;
 }
 
 SaveGame *GameEngine::convertToSaveGame()
@@ -209,7 +212,7 @@ void GameEngine::gameOver(){
     std::cout << "Score for " << *player1->getName() << " : " << *(player1->getPoints()) << "\n";
     std::cout << "Score for " << *player2->getName() << " : " << *(player2->getPoints()) << "\n";
     if(*(player1->getPoints()) > *(player2->getPoints())){
-        std::cout << "Player " << player1->getName() << " won!\n";
+        std::cout << *player1->getName() << " won!\n";
     }
     else if(*(player2->getPoints()) > *(player1->getPoints())){
         std::cout << *player2->getName() << " won!\n";
@@ -320,8 +323,8 @@ bool GameEngine::placeTile(std::string* inputPtr){
     if((*boardPtr)[yCoord][xCoord]==nullptr){
         emptySpace = true;
     }
-    //check if is not surrounded by anything and not turn 1
-    if(this->noNeighboursOnY(xCoord, yCoord) && this->noNeighboursOnX(xCoord, yCoord) && ((*turnPtr)!=0)){
+    //check if is not surrounded by anything and not an empty board
+    if(this->noNeighboursOnY(xCoord, yCoord) && this->noNeighboursOnX(xCoord, yCoord) && !emptyBoard()){
         tileHasNeighbour = false;
     }
     //check if board space is legal on both axis's that HAVE neighbours, if no neighbours it assumed legal (the above check accounts for if no neighbours)
@@ -350,14 +353,11 @@ bool GameEngine::placeTile(std::string* inputPtr){
         //remove from player hand
         playerHand->deletePosition(tilePositionInHand);
         //get a tile from the bag and place in player hand (if bag has tiles)
-        std::cout << "just before oh no notiles left\n";
         if(!bagTiles->isEmpty()){
-            std::cout << "should be skipped\n";
             tileToPlace = bagTiles->getTile(0);
             playerHand->insertBack(tileToPlace);
             bagTiles->deleteFront();
         }
-        std::cout << "Oh no, no tiles left\n";
         activePlayer->addPoints(points);
         //lastly if this was the first turn of the game then the player needs to be given one point
         if((*turnPtr)==0){
@@ -370,6 +370,19 @@ bool GameEngine::placeTile(std::string* inputPtr){
     return false;
 
 }
+//returns true if board is empty
+bool GameEngine::emptyBoard(){
+    bool isEmpty = true;
+    for(int i = 0; i < MAX_MAP_LENGTH; i++){
+        for(int j = 0; j < MAX_MAP_LENGTH; j++){
+            if((*boardPtr)[i][j] != nullptr){
+                isEmpty = false;
+            }
+        }
+    }
+    return isEmpty;
+}
+
 // checks the legality along the X Axis
 bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput, int* points){
 
@@ -418,6 +431,7 @@ bool GameEngine::boardXAxisLegal(char colour, int shape, int xInput, int yInput,
     }
 
     delete xAxisMove;
+    delete tilePtr;
     return legalMove;
 
 }
@@ -476,6 +490,7 @@ bool GameEngine::boardYAxisLegal(char colour, int shape, int xInput, int yInput,
         *points+=potentialPoints;
     }
     delete yAxisMove;
+    delete tilePtr;
     return legalMove;
 
 }
@@ -534,8 +549,8 @@ bool GameEngine::checkPlacementLegality(LinkedList* listToTest){
     if((allOneColour && allOneShape)){
         validityCheck = false;
     }
-    //if its the first turn then all moves are legal
-    if(*turnPtr == 0){
+    //if its the board is empty then all moves are legal
+    if(this->emptyBoard()){
         validityCheck = true;
     }
 

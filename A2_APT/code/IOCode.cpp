@@ -137,9 +137,11 @@ SaveGame *IOCode::readFile(std::string fileName)
             {
                 if (other == 1)
                 {
-
-                    sg -> bag = line;
-                    ++other;
+                    if(line != "\n"){
+                        sg -> bag = line;
+                        ++other;
+                    }else{
+                    }
                 }
                 else if (other == 2)
                 {

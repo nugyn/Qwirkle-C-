@@ -31,7 +31,6 @@ int main(void) {
        mainMenu();
    }
    std::cout << "Goodbye!\n";
-
    return EXIT_SUCCESS;
 }
 
@@ -307,6 +306,7 @@ void loadGame()
 
     delete gameEnginePtr;
     delete[] board;
+    delete fileLoader;
 }
 
 void showInfo(){
